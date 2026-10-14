@@ -1,0 +1,10 @@
+{
+  "total_records": 9511402,
+  "valid_records": 9511402,
+  "mean_frp": 8.633136572295122,
+  "max_frp": 1682.83,
+  "mean_brightness": 334.8274918219275,
+  "mean_bright_t31": 298.7710254334734,
+  "total_extreme_fires": 178814,
+  "processing_time_seconds": 119.61
+}

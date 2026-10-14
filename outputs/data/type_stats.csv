@@ -1,0 +1,13 @@
+type,confidence,count,avg_frp,type_name
+0,h,447670,24.44,Vegetation/Wildfire
+0,l,1144006,10.12,Vegetation/Wildfire
+0,n,7109804,7.89,Vegetation/Wildfire
+1,h,1016,63.25,Active Volcano
+1,l,501,61.65,Active Volcano
+1,n,17160,12.06,Active Volcano
+2,h,16520,16.46,Static Land/Industrial
+2,l,19049,9.09,Static Land/Industrial
+2,n,682803,3.56,Static Land/Industrial
+3,h,3074,15.46,Offshore Flare
+3,l,1104,9.35,Offshore Flare
+3,n,68695,4.16,Offshore Flare

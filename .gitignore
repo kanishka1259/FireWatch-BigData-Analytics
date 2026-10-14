@@ -1,0 +1,44 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Large Dataset files (> 100MB GitHub limit)
+fire_archive_*.csv
+*.csv.gz
+
+# Trained Model Binaries (> 100MB GitHub limit)
+*.pkl
+*.joblib
+ml_model/*.pkl
+
+# Databases & local storage
+*.db
+*.sqlite
+*.sqlite3
+outputs/data/*.db
+
+# Virtual environments
+venv/
+env/
+.venv/
+ENV/
+
+# Distribution / packaging
+build/
+dist/
+*.egg-info/
+
+# Logs and databases
+*.log
+logs/
+
+# IDE & Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS generated files
+.DS_Store
+Thumbs.db

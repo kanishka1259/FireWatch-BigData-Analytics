@@ -1,0 +1,94 @@
+{
+  "classification": {
+    "model_name": "Random Forest Classifier (Ensemble)",
+    "benchmark_model": "Histogram Gradient Boosted Trees",
+    "accuracy": 0.7472,
+    "precision_macro": 0.7006,
+    "recall_macro": 0.514,
+    "f1_macro": 0.5527,
+    "f1_weighted": 0.7309,
+    "roc_auc_weighted": 0.8742,
+    "gbt_accuracy": 0.747,
+    "gbt_f1_weighted": 0.7297,
+    "gbt_roc_auc": 0.8747,
+    "inference_latency_per_sample_ms": 0.0068,
+    "training_time_seconds": 5.83,
+    "confusion_matrix": [
+      [
+        14183,
+        3549,
+        3,
+        3
+      ],
+      [
+        3254,
+        15022,
+        188,
+        11
+      ],
+      [
+        197,
+        2176,
+        411,
+        91
+      ],
+      [
+        41,
+        477,
+        120,
+        274
+      ]
+    ]
+  },
+  "regression": {
+    "model_name": "Random Forest Regressor",
+    "target": "Fire Radiative Power (MW)",
+    "rmse": 13.4508,
+    "mae": 5.2276,
+    "r2_score": 0.4739,
+    "explained_variance": 0.474,
+    "training_time_seconds": 16.96
+  },
+  "feature_importance": {
+    "brightness": 0.3292,
+    "brightness_diff": 0.1324,
+    "bright_t31": 0.1263,
+    "is_day": 0.0987,
+    "scan": 0.0779,
+    "latitude": 0.0691,
+    "longitude": 0.069,
+    "track": 0.0423,
+    "hour": 0.0351,
+    "confidence_num": 0.02,
+    "month": 0.0
+  },
+  "decision_framework": {
+    "name": "Wildfire Alert & Rapid Dispatch (WARD)",
+    "tiers": [
+      {
+        "tier": "Tier 3: Low",
+        "range": "< 5 MW",
+        "action": "Routine satellite surveillance",
+        "dispatch": "None"
+      },
+      {
+        "tier": "Tier 2: Moderate",
+        "range": "5 - 20 MW",
+        "action": "Watch status, notify local forest rangers",
+        "dispatch": "Ground reconnaissance"
+      },
+      {
+        "tier": "Tier 1: High",
+        "range": "20 - 50 MW",
+        "action": "High alert, mobilize ground firefighting units",
+        "dispatch": "Local response crews"
+      },
+      {
+        "tier": "Tier 0: Extreme",
+        "range": ">= 50 MW",
+        "action": "CRITICAL EMERGENCY - Rapid Aerial Water/Retardant Drop",
+        "dispatch": "Air-tanker & heavy brigade"
+      }
+    ]
+  }
+}
