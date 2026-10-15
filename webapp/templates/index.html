@@ -259,6 +259,14 @@
             border-radius: 12px;
             border: 1px solid var(--border-subtle);
             z-index: 10;
+            box-shadow: 0 0 25px rgba(0, 0, 0, 0.5);
+        }
+
+        .btn-map-layer.active-layer {
+            background: linear-gradient(135deg, rgba(2, 132, 199, 0.6), rgba(56, 189, 248, 0.4)) !important;
+            color: #ffffff !important;
+            font-weight: 700 !important;
+            box-shadow: 0 0 10px rgba(56, 189, 248, 0.4);
         }
 
         /* Prediction Simulator Form */
@@ -920,9 +928,18 @@
         <div class="dashboard-split">
             <!-- Left: Interactive Leaflet Map -->
             <div class="card-container">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.85rem;">
-                    <span style="font-weight: 700; font-size: 0.95rem;">Geospatial Fire Distribution & Severity Density</span>
-                    <div style="display: flex; gap: 0.5rem;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.85rem; flex-wrap: wrap; gap: 0.6rem;">
+                    <div>
+                        <span style="font-weight: 700; font-size: 0.95rem; color: #fff;">🌍 Global Earth Satellite Telemetry Map</span>
+                        <div style="font-size: 0.74rem; color: var(--text-muted);">Photographic Earth satellite globe & active wildfire cluster density</div>
+                    </div>
+                    <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; align-items: center;">
+                        <!-- Globe vs Dark Mode Layer Switcher -->
+                        <div style="display: flex; background: rgba(255,255,255,0.06); border: 1px solid var(--border-subtle); border-radius: 9999px; padding: 2px;">
+                            <button type="button" onclick="setMapLayer('satellite')" class="pill-badge btn-map-layer active-layer" id="btnLayer-satellite" style="cursor: pointer; border: none; font-size: 0.72rem; padding: 0.25rem 0.65rem;">🛰️ Globe Satellite</button>
+                            <button type="button" onclick="setMapLayer('dark')" class="pill-badge btn-map-layer" id="btnLayer-dark" style="cursor: pointer; border: none; background: transparent; font-size: 0.72rem; padding: 0.25rem 0.65rem;">🌑 Dark Canvas</button>
+                        </div>
+                        <!-- Severity Filters -->
                         <button onclick="filterMap('All')" class="pill-badge" style="cursor: pointer;">All</button>
                         <button onclick="filterMap('Extreme')" class="pill-badge" style="cursor: pointer; color: #ff4500;">Extreme (&ge;50MW)</button>
                         <button onclick="filterMap('High')" class="pill-badge" style="cursor: pointer; color: #f59e0b;">High (20-50MW)</button>
@@ -1416,6 +1433,7 @@
     <!-- Interactive Scripts -->
     <script>
         let map, markerGroup, allHotspots = [];
+        let tileLayers = {};
 
         // Initialize Map
         function initMap() {
@@ -1423,17 +1441,37 @@
                 center: [15, 10],
                 zoom: 2,
                 minZoom: 2,
-                maxZoom: 10
+                maxZoom: 14,
+                worldCopyJump: true
             });
 
-            L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-                attribution: '&copy; OpenStreetMap contributors & CartoDB',
-                subdomains: 'abcd',
-                maxZoom: 19
-            }).addTo(map);
+            // 1. Real Photographic Satellite Globe of Earth (Esri World Imagery - NO API Key Required)
+            tileLayers.satellite = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+                attribution: '&copy; NASA FIRMS & Esri World Imagery (Photographic Satellite Earth)',
+                maxZoom: 18
+            });
+
+            // 2. High-Tech Dark Canvas (Esri Dark Canvas - NO API Key Required)
+            tileLayers.dark = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}', {
+                attribution: '&copy; Esri Dark Canvas &mdash; Hotspot Telemetry',
+                maxZoom: 16
+            });
+
+            // Default to Real Photographic Satellite Globe
+            tileLayers.satellite.addTo(map);
 
             markerGroup = L.layerGroup().addTo(map);
             loadHotspots();
+        }
+
+        function setMapLayer(name) {
+            Object.values(tileLayers).forEach(layer => map.removeLayer(layer));
+            if (tileLayers[name]) {
+                tileLayers[name].addTo(map);
+            }
+            document.querySelectorAll('.btn-map-layer').forEach(btn => btn.classList.remove('active-layer'));
+            const activeBtn = document.getElementById('btnLayer-' + name);
+            if (activeBtn) activeBtn.classList.add('active-layer');
         }
 
         // Color mapping by severity
@@ -1458,14 +1496,14 @@
         function renderMarkers(data) {
             markerGroup.clearLayers();
             data.forEach(pt => {
-                const radius = Math.min(Math.max(pt.frp / 6.0, 3), 14);
+                const radius = Math.min(Math.max(pt.frp / 6.0, 3.5), 14);
                 const circle = L.circleMarker([pt.latitude, pt.longitude], {
                     radius: radius,
                     fillColor: getColor(pt.frp),
                     color: '#ffffff',
-                    weight: 0.5,
-                    opacity: 0.8,
-                    fillOpacity: 0.75
+                    weight: 1,
+                    opacity: 0.95,
+                    fillOpacity: 0.85
                 });
                 circle.bindPopup(`
                     <div style="font-family: sans-serif; font-size: 12px; color: #111;">
