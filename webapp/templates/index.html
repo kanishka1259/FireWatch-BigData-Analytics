@@ -82,42 +82,34 @@
             transform: scale(1.1) rotate(-5deg);
         }
 
-        .telemetry-ticker {
-            background: rgba(11, 61, 145, 0.18);
-            border-bottom: 1px solid rgba(56, 189, 248, 0.25);
-            padding: 0.5rem 2.5rem;
-            font-size: 0.73rem;
-            font-family: 'JetBrains Mono', monospace;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            color: #93c5fd;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            overflow-x: auto;
-            white-space: nowrap;
-            gap: 1.5rem;
+        /* Ambient NASA Video Background */
+        .video-bg-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -2;
+            overflow: hidden;
+            pointer-events: none;
         }
 
-        .telemetry-item {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
+        .video-bg-container video {
+            width: 100vw;
+            height: 100vh;
+            object-fit: cover;
+            opacity: 0.22;
+            filter: brightness(0.65) contrast(1.2) saturate(1.25);
         }
 
-        .radar-ping {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background: #38bdf8;
-            box-shadow: 0 0 0 0 rgba(56, 189, 248, 0.7);
-            animation: radar-ping 1.8s infinite cubic-bezier(0.66, 0, 0, 1);
-        }
-
-        @keyframes radar-ping {
-            0% { box-shadow: 0 0 0 0 rgba(56, 189, 248, 0.8); }
-            70% { box-shadow: 0 0 0 10px rgba(56, 189, 248, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(56, 189, 248, 0); }
+        .video-bg-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 50% 30%, rgba(9, 13, 22, 0.65) 0%, rgba(9, 13, 22, 0.94) 100%),
+                        linear-gradient(180deg, rgba(9, 13, 22, 0.7) 0%, rgba(9, 13, 22, 0.98) 100%);
         }
 
         .brand-text h1 {
@@ -847,6 +839,14 @@
 </head>
 <body>
 
+    <!-- Ambient NASA Earth Orbit Background Video -->
+    <div class="video-bg-container">
+        <video autoplay muted loop playsinline id="bgVideo">
+            <source src="/static/videos/earth_orbit.webm" type="video/webm">
+        </video>
+        <div class="video-bg-overlay"></div>
+    </div>
+
     <!-- Header Navigation -->
     <header>
         <div class="brand">
@@ -882,26 +882,6 @@
             <div class="pill-badge" style="border-color: rgba(168, 85, 247, 0.4); color: #c084fc;">NoSQL DocStore Active</div>
         </div>
     </header>
-
-    <!-- NASA Mission Telemetry Ribbon -->
-    <div class="telemetry-ticker">
-        <div class="telemetry-item">
-            <span class="radar-ping"></span>
-            <span>MISSION: NASA EOSDIS / FIRMS GLOBAL WILDFIRE TELEMETRY</span>
-        </div>
-        <div class="telemetry-item">
-            <span>SATELLITE CONSTELLATION: SUOMI-NPP & NOAA-20 (VIIRS)</span>
-        </div>
-        <div class="telemetry-item">
-            <span>SENSOR: 375m I-BAND ACTIVE FIRE RADIOMETER (I-4 3.74µm / I-5 11.45µm)</span>
-        </div>
-        <div class="telemetry-item">
-            <span>ORBIT: 824 KM SUN-SYNCHRONOUS POLAR (13:30 ASCENDING)</span>
-        </div>
-        <div class="telemetry-item">
-            <span style="color: #10b981; font-weight: bold;">● DIRECT BROADCAST NETWORK: ACTIVE</span>
-        </div>
-    </div>
 
     <div class="container">
 
@@ -1335,12 +1315,18 @@
         </div>
 
         <!-- Machine Learning Model Performance Analysis Scorecard -->
-        <div class="section-header">
-            <div>
-                <h2>🧠 Machine Learning Model Performance Analysis</h2>
-                <p>Comprehensive comparative evaluation across 4 model architectures, empirical test sets, and forward-chronological validation</p>
+        <div class="section-header" style="flex-direction: column; align-items: flex-start; gap: 0.45rem; margin-bottom: 1.4rem;">
+            <div style="display: flex; justify-content: space-between; align-items: center; width: 100%; flex-wrap: wrap; gap: 0.75rem;">
+                <h2 style="font-size: 1.45rem; font-weight: 700; color: #fff; margin: 0;">
+                    🧠 Machine Learning Model Performance Analysis
+                </h2>
+                <div class="pill-badge" style="color: #10b981; border-color: #10b981; font-weight: 600;">
+                    200,000 Sample Empirical Benchmark
+                </div>
             </div>
-            <div class="pill-badge" style="color: #10b981; border-color: #10b981;">200,000 Sample Empirical Benchmark</div>
+            <p style="font-size: 0.92rem; color: var(--text-muted); display: block; width: 100%; margin-top: 0.25rem; line-height: 1.5;">
+                Comprehensive comparative evaluation across 4 model architectures, empirical test sets, and forward-chronological validation
+            </p>
         </div>
 
         <div class="card-container">
@@ -1412,27 +1398,10 @@
                             <td>Log-Loss: 0.694</td>
                             <td>2.32 s</td>
                             <td>0.0019 ms / pt</td>
-                            <td><span class="pill-badge" style="color: #a855f7; border-color: #a855f7;">Validated Drift (Member 2 Contribution)</span></td>
+                            <td><span class="pill-badge" style="color: #a855f7; border-color: #a855f7;">Forward-Temporal Holdout (Validated)</span></td>
                         </tr>
                     </tbody>
                 </table>
-            </div>
-
-            <!-- Team Responsibility & Architectural Allocation Rationale -->
-            <div style="margin-top: 1.25rem; padding: 1.15rem 1.4rem; background: rgba(56, 189, 248, 0.05); border: 1px solid rgba(56, 189, 248, 0.25); border-radius: 12px; font-size: 0.84rem; line-height: 1.6; color: #cbd5e1;">
-                <div style="font-weight: 700; color: #38bdf8; margin-bottom: 0.4rem; display: flex; align-items: center; gap: 0.5rem; font-size: 0.92rem;">
-                    <span>📌 Pipeline Architecture & Team Contribution Breakdown:</span>
-                </div>
-                <div style="display: flex; flex-direction: column; gap: 0.5rem;">
-                    <div>
-                        <strong style="color: #fff;">• Core Machine Learning Architecture (Shared Group Component / Members 3 & 4):</strong> 
-                        Formulation of the 4-tier fire severity classification scheme, continuous Fire Radiative Power (FRP) regression, Random Forest and Histogram Gradient Boosted Trees (HistGBDT) model training, and integration into the WARD live inference API.
-                    </div>
-                    <div>
-                        <strong style="color: #38bdf8;">• Member 2 Specialization (Temporal Holdout & Concept Drift Validation):</strong> 
-                        Member 2 was specifically tasked with evaluating the models' chronological robustness and preventing temporal data leakage. Member 2 designed and conducted the <em>Forward-Chronological Holdout Validation Split</em> (training on historical data up to October 2025 and testing forward on future observations through June 2026), proving that while accuracy shifts from 74.72% to 71.19% due to seasonal fuel moisture changes, the model maintains high discriminative power (ROC-AUC 0.8415). Member 2 also engineered key temporal telemetry features (<code>hour</code>, <code>month</code>, <code>is_day</code>).
-                    </div>
-                </div>
             </div>
         </div>
 
