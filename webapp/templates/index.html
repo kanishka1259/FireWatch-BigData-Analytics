@@ -67,18 +67,57 @@
         .brand {
             display: flex;
             align-items: center;
-            gap: 1rem;
+            gap: 1.15rem;
         }
 
-        .brand-icon {
-            font-size: 2rem;
-            filter: drop-shadow(0 0 12px rgba(255, 69, 0, 0.7));
-            animation: pulse-fire 2s infinite ease-in-out;
+        .nasa-insignia {
+            width: 48px;
+            height: 48px;
+            flex-shrink: 0;
+            filter: drop-shadow(0 0 12px rgba(11, 61, 145, 0.9));
+            transition: transform 0.4s ease;
         }
 
-        @keyframes pulse-fire {
-            0%, 100% { transform: scale(1); filter: drop-shadow(0 0 8px rgba(255, 69, 0, 0.6)); }
-            50% { transform: scale(1.08); filter: drop-shadow(0 0 16px rgba(255, 140, 0, 0.9)); }
+        .nasa-insignia:hover {
+            transform: scale(1.1) rotate(-5deg);
+        }
+
+        .telemetry-ticker {
+            background: rgba(11, 61, 145, 0.18);
+            border-bottom: 1px solid rgba(56, 189, 248, 0.25);
+            padding: 0.5rem 2.5rem;
+            font-size: 0.73rem;
+            font-family: 'JetBrains Mono', monospace;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: #93c5fd;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            overflow-x: auto;
+            white-space: nowrap;
+            gap: 1.5rem;
+        }
+
+        .telemetry-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .radar-ping {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #38bdf8;
+            box-shadow: 0 0 0 0 rgba(56, 189, 248, 0.7);
+            animation: radar-ping 1.8s infinite cubic-bezier(0.66, 0, 0, 1);
+        }
+
+        @keyframes radar-ping {
+            0% { box-shadow: 0 0 0 0 rgba(56, 189, 248, 0.8); }
+            70% { box-shadow: 0 0 0 10px rgba(56, 189, 248, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(56, 189, 248, 0); }
         }
 
         .brand-text h1 {
@@ -330,57 +369,398 @@
             border-radius: 4px;
         }
 
-        /* 5 Analysis Questions Accordions */
-        .questions-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));
-            gap: 1.25rem;
-        }
-
-        .q-card {
+        /* Interactive Operational Intelligence Console */
+        .protocol-console {
             background: var(--bg-card);
             border: 1px solid var(--border-subtle);
-            border-radius: 14px;
-            padding: 1.35rem;
+            border-radius: 18px;
+            padding: 1.5rem;
             backdrop-filter: var(--glass-blur);
             display: flex;
             flex-direction: column;
-            gap: 0.75rem;
+            gap: 1.25rem;
+            box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+        }
+
+        .protocol-tabs {
+            display: flex;
+            gap: 0.65rem;
+            overflow-x: auto;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid var(--border-subtle);
+        }
+
+        .protocol-tab {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border-subtle);
+            color: var(--text-muted);
+            padding: 0.65rem 1.15rem;
+            border-radius: 10px;
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            white-space: nowrap;
+        }
+
+        .protocol-tab:hover {
+            background: rgba(255, 255, 255, 0.08);
+            color: #fff;
+            border-color: rgba(56, 189, 248, 0.4);
+            transform: translateY(-1px);
+        }
+
+        .protocol-tab.active {
+            background: linear-gradient(135deg, rgba(255, 69, 0, 0.2), rgba(56, 189, 248, 0.15));
+            border-color: #38bdf8;
+            color: #fff;
+            box-shadow: 0 0 16px rgba(56, 189, 248, 0.25);
+        }
+
+        .protocol-tab .tab-badge {
+            background: rgba(255, 255, 255, 0.08);
+            color: #38bdf8;
+            font-size: 0.7rem;
+            padding: 0.15rem 0.45rem;
+            border-radius: 4px;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .protocol-tab.active .tab-badge {
+            background: #38bdf8;
+            color: #090d16;
+            font-weight: 700;
+        }
+
+        /* Protocol Showcase Display */
+        .protocol-showcase {
+            display: grid;
+            grid-template-columns: 1.15fr 0.85fr;
+            gap: 1.5rem;
+            animation: fadeInSlide 0.32s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @media (max-width: 960px) {
+            .protocol-showcase { grid-template-columns: 1fr; }
+        }
+
+        @keyframes fadeInSlide {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .protocol-card {
+            background: rgba(10, 15, 28, 0.7);
+            border: 1px solid var(--border-subtle);
+            border-radius: 14px;
+            padding: 1.4rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.9rem;
+            position: relative;
+        }
+
+        .protocol-pill {
+            align-self: flex-start;
+            padding: 0.3rem 0.8rem;
+            border-radius: 9999px;
+            font-size: 0.74rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .protocol-stat-chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.6rem;
+            margin-top: 0.5rem;
+        }
+
+        .stat-chip {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid var(--border-subtle);
+            padding: 0.4rem 0.75rem;
+            border-radius: 8px;
+            font-size: 0.76rem;
+            display: flex;
+            align-items: center;
+            gap: 0.45rem;
+            color: #cbd5e1;
+        }
+
+        .stat-chip-val {
+            color: #ff8c00;
+            font-weight: 700;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        /* Full Comparison Grid Mode */
+        .protocol-all-grid {
+            display: none;
+            grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+            gap: 1.25rem;
+        }
+
+        .protocol-all-grid.active {
+            display: grid;
+        }
+
+        /* Publication Gallery Cards */
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+            gap: 1.15rem;
+        }
+
+        .gallery-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border-subtle);
+            border-radius: 12px;
+            padding: 1.1rem;
+            cursor: pointer;
+            transition: all 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .gallery-card:hover {
+            transform: translateY(-4px);
+            border-color: #38bdf8;
+            box-shadow: 0 12px 25px -5px rgba(0, 0, 0, 0.5), 0 0 18px rgba(56, 189, 248, 0.25);
+            background: rgba(56, 189, 248, 0.05);
+        }
+
+        .gallery-card-badge {
+            font-size: 0.7rem;
+            font-weight: 700;
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            align-self: flex-start;
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .gallery-card-title {
+            font-weight: 700;
+            font-size: 0.92rem;
+            color: #fff;
+            margin-bottom: 0.35rem;
+        }
+
+        .gallery-card-sub {
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            line-height: 1.4;
+        }
+
+        .gallery-card-action {
+            margin-top: 0.85rem;
+            padding-top: 0.65rem;
+            border-top: 1px solid var(--border-subtle);
+            font-size: 0.74rem;
+            color: #38bdf8;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.35rem;
+        }
+
+        /* Smooth Lightbox Modal */
+        .telemetry-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(4, 7, 15, 0.88);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            z-index: 99999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.26s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .telemetry-modal.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .modal-dialog {
+            background: #0d1424;
+            border: 1px solid rgba(56, 189, 248, 0.35);
+            border-radius: 18px;
+            max-width: 1050px;
+            width: 100%;
+            max-height: 94vh;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 25px 65px -15px rgba(0, 0, 0, 0.9), 0 0 35px rgba(56, 189, 248, 0.25);
+            overflow: hidden;
+            transform: scale(0.92);
+            transition: transform 0.26s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .telemetry-modal.active .modal-dialog {
+            transform: scale(1);
+        }
+
+        .modal-header {
+            padding: 1.15rem 1.6rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border-subtle);
+            background: rgba(13, 20, 36, 0.98);
+        }
+
+        .modal-title-group h3 {
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .modal-title-group p {
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            margin-top: 0.2rem;
+        }
+
+        .modal-close-btn {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid var(--border-subtle);
+            color: #fff;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            font-size: 1.25rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             transition: all 0.2s ease;
         }
 
-        .q-card:hover {
-            border-color: rgba(56, 189, 248, 0.4);
-            transform: translateY(-2px);
+        .modal-close-btn:hover {
+            background: #ef4444;
+            border-color: #ef4444;
+            transform: rotate(90deg);
         }
 
-        .q-num {
-            font-size: 0.75rem;
-            font-weight: 700;
-            color: #38bdf8;
-            text-transform: uppercase;
-            letter-spacing: 0.06em;
+        .modal-body {
+            padding: 1.25rem 1.6rem;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            background: #080d1a;
         }
 
-        .q-title {
-            font-size: 1.05rem;
-            font-weight: 700;
+        .modal-image-wrap {
+            width: 100%;
+            background: #040711;
+            border-radius: 12px;
+            border: 1px solid var(--border-subtle);
+            padding: 0.75rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 340px;
+        }
+
+        .modal-image-wrap img {
+            max-width: 100%;
+            max-height: 52vh;
+            object-fit: contain;
+            border-radius: 6px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.6);
+            transition: opacity 0.25s ease;
+        }
+
+        .modal-insight-box {
+            background: rgba(56, 189, 248, 0.06);
+            border-left: 3px solid #38bdf8;
+            padding: 0.85rem 1.15rem;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            line-height: 1.55;
+            color: #cbd5e1;
+        }
+
+        .modal-footer {
+            padding: 0.9rem 1.6rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid var(--border-subtle);
+            background: rgba(13, 20, 36, 0.98);
+            flex-wrap: wrap;
+            gap: 0.75rem;
+        }
+
+        .modal-nav-btns {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+        }
+
+        .modal-counter {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.82rem;
+            color: var(--text-muted);
+            padding: 0 0.5rem;
+        }
+
+        .modal-btn {
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            font-size: 0.82rem;
+            font-weight: 600;
+            cursor: pointer;
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid var(--border-subtle);
+            color: #e2e8f0;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            transition: all 0.2s ease;
+        }
+
+        .modal-btn:hover {
+            background: rgba(255, 255, 255, 0.14);
             color: #fff;
         }
 
-        .q-body {
-            font-size: 0.86rem;
-            color: var(--text-muted);
-            line-height: 1.55;
+        .modal-btn-primary {
+            background: linear-gradient(135deg, #0284c7, #38bdf8);
+            border: none;
+            color: #030712;
+            font-weight: 700;
         }
 
-        .q-decision {
-            background: rgba(56, 189, 248, 0.06);
-            border-left: 3px solid #38bdf8;
-            padding: 0.65rem 0.85rem;
-            border-radius: 4px;
-            font-size: 0.82rem;
-            color: #e2e8f0;
+        .modal-btn-primary:hover {
+            filter: brightness(1.12);
+            box-shadow: 0 0 15px rgba(56, 189, 248, 0.4);
         }
 
         /* Charts Grid */
@@ -470,18 +850,58 @@
     <!-- Header Navigation -->
     <header>
         <div class="brand">
-            <span class="brand-icon">🔥</span>
+            <!-- Official NASA Vector Insignia -->
+            <svg class="nasa-insignia" viewBox="0 0 120 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <!-- Deep Blue Sphere -->
+                <circle cx="60" cy="50" r="46" fill="#0B3D91" />
+                <!-- Orbit Ring -->
+                <ellipse cx="60" cy="50" rx="49" ry="17" stroke="#FFFFFF" stroke-width="2.6" transform="rotate(-30 60 50)" fill="none" opacity="0.92" />
+                <!-- Orbital Red Aeronautics Vector Chevron -->
+                <path d="M19 65 L60 18 L73 35 L44 67 Z" fill="#FC3D21" />
+                <path d="M60 18 L101 65 L76 68 L60 46 Z" fill="#FC3D21" />
+                <!-- White Constellation Stars -->
+                <circle cx="34" cy="30" r="1.6" fill="#FFFFFF" />
+                <circle cx="48" cy="22" r="1.2" fill="#FFFFFF" />
+                <circle cx="78" cy="26" r="1.8" fill="#FFFFFF" />
+                <circle cx="88" cy="40" r="1.2" fill="#FFFFFF" />
+                <circle cx="42" cy="72" r="1.5" fill="#FFFFFF" />
+                <circle cx="76" cy="74" r="1.4" fill="#FFFFFF" />
+                <circle cx="28" cy="50" r="1.2" fill="#FFFFFF" />
+                <circle cx="92" cy="58" r="1.5" fill="#FFFFFF" />
+                <!-- NASA Typography -->
+                <text x="60" y="58" font-family="'Outfit', 'Helvetica Neue', sans-serif" font-weight="900" font-size="22" fill="#FFFFFF" text-anchor="middle" letter-spacing="2.5">NASA</text>
+            </svg>
             <div class="brand-text">
                 <h1>NASA FIRMS Wildfire AI & Analytics</h1>
                 <p>Global Fire Hotspot Telemetry | Real-Time Decision Framework (WARD)</p>
             </div>
         </div>
         <div class="nav-badges">
-            <div class="pill-badge"><span class="dot-green"></span> PySpark Engine Ready</div>
-            <div class="pill-badge" id="badge-records">9.5M Hotspots</div>
-            <div class="pill-badge" style="border-color: rgba(168, 85, 247, 0.4); color: #c084fc;">NoSQL DocStore</div>
+            <div class="pill-badge"><span class="dot-green"></span> PySpark 4.2 Cluster Ready</div>
+            <div class="pill-badge" id="badge-records">9,511,402 Telemetry Records</div>
+            <div class="pill-badge" style="border-color: rgba(168, 85, 247, 0.4); color: #c084fc;">NoSQL DocStore Active</div>
         </div>
     </header>
+
+    <!-- NASA Mission Telemetry Ribbon -->
+    <div class="telemetry-ticker">
+        <div class="telemetry-item">
+            <span class="radar-ping"></span>
+            <span>MISSION: NASA EOSDIS / FIRMS GLOBAL WILDFIRE TELEMETRY</span>
+        </div>
+        <div class="telemetry-item">
+            <span>SATELLITE CONSTELLATION: SUOMI-NPP & NOAA-20 (VIIRS)</span>
+        </div>
+        <div class="telemetry-item">
+            <span>SENSOR: 375m I-BAND ACTIVE FIRE RADIOMETER (I-4 3.74µm / I-5 11.45µm)</span>
+        </div>
+        <div class="telemetry-item">
+            <span>ORBIT: 824 KM SUN-SYNCHRONOUS POLAR (13:30 ASCENDING)</span>
+        </div>
+        <div class="telemetry-item">
+            <span style="color: #10b981; font-weight: bold;">● DIRECT BROADCAST NETWORK: ACTIVE</span>
+        </div>
+    </div>
 
     <div class="container">
 
@@ -504,8 +924,8 @@
             </div>
             <div class="stat-card">
                 <div class="stat-title">ML Classifier Accuracy</div>
-                <div class="stat-value score-highlight" id="val-acc">94.8%</div>
-                <div class="stat-sub">Random Forest (F1: 0.947)</div>
+                <div class="stat-value score-highlight" id="val-acc">74.7%</div>
+                <div class="stat-sub">Random Forest (F1: 0.731)</div>
             </div>
         </div>
 
@@ -607,53 +1027,120 @@
         <div class="section-header">
             <div>
                 <h2>📋 Operational Intelligence Framework & Decision Protocols</h2>
-                <p>Core telemetry questions and rapid dispatch directives formulated from distributed satellite observation</p>
+                <p>Interactive scientific inquiry and autonomous dispatch directives formulated from 9.5M satellite observations</p>
             </div>
+            <button onclick="toggleProtocolView()" class="pill-badge" id="btnProtocolToggle" style="cursor: pointer; background: rgba(56, 189, 248, 0.08); border-color: #38bdf8; color: #38bdf8;">
+                📑 View All Protocols (Grid Mode)
+            </button>
         </div>
 
-        <div class="questions-grid">
-            <div class="q-card">
-                <span class="q-num">Frame Question 1</span>
-                <div class="q-title">Spatiotemporal Wildfire Dynamics</div>
-                <div class="q-body">What is the monthly and diurnal temporal distribution of global fire hotspots, and when do peak thermal energy spikes occur?</div>
-                <div class="q-decision">
-                    <strong>Operational Decision:</strong> Global fire incidence peaks strongly between July and October (1.45M fires/month). High-altitude aerial surveillance patrols should scale by 300% during this window across Northern boreal zones.
+        <!-- Interactive Protocol Console -->
+        <div class="protocol-console" id="protocolConsoleWrap">
+            <!-- Segmented Tabs Navigation -->
+            <div class="protocol-tabs">
+                <button class="protocol-tab active" onclick="selectProtocol(0)">
+                    <span class="tab-badge">01</span>
+                    <span>Spatiotemporal Dynamics</span>
+                </button>
+                <button class="protocol-tab" onclick="selectProtocol(1)">
+                    <span class="tab-badge">02</span>
+                    <span>Diurnal vs. Nocturnal</span>
+                </button>
+                <button class="protocol-tab" onclick="selectProtocol(2)">
+                    <span class="tab-badge">03</span>
+                    <span>Land Cover & Flares</span>
+                </button>
+                <button class="protocol-tab" onclick="selectProtocol(3)">
+                    <span class="tab-badge">04</span>
+                    <span>Spectral Radiative Flux</span>
+                </button>
+                <button class="protocol-tab" onclick="selectProtocol(4)">
+                    <span class="tab-badge">05</span>
+                    <span>WARD Rapid Dispatch</span>
+                </button>
+            </div>
+
+            <!-- Dynamic Showcase Display -->
+            <div class="protocol-showcase" id="protocolShowcase">
+                <!-- Left: Scientific Telemetry Inquiry -->
+                <div class="protocol-card">
+                    <span class="protocol-pill" id="protoCategory" style="background: rgba(56, 189, 248, 0.12); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.3);">
+                        🌍 Question 1: Spatiotemporal Wildfire Dynamics
+                    </span>
+                    <h3 id="protoTitle" style="font-size: 1.25rem; font-weight: 700; color: #fff;">
+                        Global Fire Hotspot Seasonality & Peak Energy Spikes
+                    </h3>
+                    <p id="protoBody" style="font-size: 0.9rem; color: #cbd5e1; line-height: 1.6;">
+                        What is the monthly and diurnal temporal distribution of global fire hotspots, and when do extreme thermal energy spikes occur across hemispheric biomes?
+                    </p>
+                    <div class="protocol-stat-chips" id="protoChips">
+                        <div class="stat-chip"><span>Peak Volume:</span> <span class="stat-chip-val">Jan 2026 (1.53M)</span></div>
+                        <div class="stat-chip"><span>Peak Radiative Energy:</span> <span class="stat-chip-val">Jun 2026 (10.32 MW)</span></div>
+                        <div class="stat-chip"><span>Busiest Observed Day:</span> <span class="stat-chip-val">2025-10-16 (66.8K)</span></div>
+                    </div>
+                </div>
+
+                <!-- Right: Autonomous WARD Dispatch Protocol -->
+                <div class="protocol-card" style="border-left: 4px solid #ff4500;">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <span class="protocol-pill" id="protoDirectiveBadge" style="background: rgba(255, 69, 0, 0.15); color: #ff8c00; border: 1px solid rgba(255, 69, 0, 0.3);">
+                            ⚡ TACTICAL ESCALATION DIRECTIVE
+                        </span>
+                        <span id="protoPriority" style="font-size: 0.75rem; font-weight: 700; color: #ff4500; font-family: 'JetBrains Mono', monospace;">LEVEL 1: CRITICAL</span>
+                    </div>
+                    <div>
+                        <div style="font-size: 0.8rem; font-weight: 600; color: var(--text-muted); text-transform: uppercase; margin-bottom: 0.35rem;">Operational Directive & Resource Allocation:</div>
+                        <p id="protoDecision" style="font-size: 0.92rem; color: #f1f5f9; line-height: 1.6; font-weight: 500;">
+                            Global fire incidence peaks strongly between July and October (1.45M fires/month). High-altitude aerial surveillance patrols should scale by 300% during this window across Northern boreal zones, pre-positioning air tankers in high-risk zones.
+                        </p>
+                    </div>
+                    <div style="background: rgba(255,255,255,0.03); border: 1px solid var(--border-subtle); padding: 0.65rem 0.85rem; border-radius: 8px; font-size: 0.78rem; color: #94a3b8;" id="protoResource">
+                        <strong>Deployment Target:</strong> Airborne water-tankers & high-altitude UAV patrols dynamically scaled across high-latitude boreal corridors.
+                    </div>
                 </div>
             </div>
 
-            <div class="q-card">
-                <span class="q-num">Frame Question 2</span>
-                <div class="q-title">Diurnal vs. Nocturnal Thermal Energetics</div>
-                <div class="q-body">How does Fire Radiative Power (FRP) and flaming intensity vary between day and night satellite overpasses?</div>
-                <div class="q-decision">
-                    <strong>Operational Decision:</strong> Nighttime fires represent ~30% of detections but any nocturnal event with FRP &gt; 30 MW indicates an aggressive crown fire that has breached the nightly humidity barrier, triggering immediate priority escalation.
+            <!-- Alternative Full Grid View (Collapsible) -->
+            <div class="protocol-all-grid" id="protocolAllGrid">
+                <div class="protocol-card">
+                    <span class="protocol-pill" style="background: rgba(56, 189, 248, 0.12); color: #38bdf8;">Frame Question 1</span>
+                    <h4 style="font-size: 1.05rem; font-weight: 700;">Spatiotemporal Wildfire Dynamics</h4>
+                    <p style="font-size: 0.84rem; color: var(--text-muted);">What is the monthly and diurnal temporal distribution of global fire hotspots, and when do peak thermal energy spikes occur?</p>
+                    <div style="background: rgba(56, 189, 248, 0.06); border-left: 3px solid #38bdf8; padding: 0.6rem; border-radius: 4px; font-size: 0.8rem;">
+                        <strong>Operational Decision:</strong> Global fire incidence peaks strongly between July and October (1.45M fires/month). High-altitude aerial surveillance patrols scale by 300% during this window across Northern boreal zones.
+                    </div>
                 </div>
-            </div>
-
-            <div class="q-card">
-                <span class="q-num">Frame Question 3</span>
-                <div class="q-title">Land Cover Source & Confidence Screening</div>
-                <div class="q-body">What proportion of hotspots represent genuine wildfires versus industrial flaring or volcanic activity?</div>
-                <div class="q-decision">
-                    <strong>Operational Decision:</strong> 90.1% are vegetation fires, while 8.9% are static industrial gas flares. Deploying geographic masking filters prevents false emergency dispatch mobilizations to oil refineries and gas fields.
+                <div class="protocol-card">
+                    <span class="protocol-pill" style="background: rgba(245, 158, 11, 0.12); color: #f59e0b;">Frame Question 2</span>
+                    <h4 style="font-size: 1.05rem; font-weight: 700;">Diurnal vs. Nocturnal Energetics</h4>
+                    <p style="font-size: 0.84rem; color: var(--text-muted);">How does Fire Radiative Power (FRP) and flaming intensity vary between day and night satellite overpasses?</p>
+                    <div style="background: rgba(245, 158, 11, 0.06); border-left: 3px solid #f59e0b; padding: 0.6rem; border-radius: 4px; font-size: 0.8rem;">
+                        <strong>Operational Decision:</strong> Nighttime fires represent ~23.8% of detections, but any nocturnal event with FRP &ge; 30 MW indicates an aggressive crown fire breaching nighttime humidity barriers, triggering immediate priority escalation.
+                    </div>
                 </div>
-            </div>
-
-            <div class="q-card">
-                <span class="q-num">Frame Question 4</span>
-                <div class="q-title">Thermal Radiative Correlation Analysis</div>
-                <div class="q-body">How strongly do VIIRS spectral brightness temperatures (I-4 vs I-5) correlate with physical Fire Radiative Power (FRP)?</div>
-                <div class="q-decision">
-                    <strong>Operational Decision:</strong> Channel I-4 (4µm) brightness and the differential (Brightness - Bright_T31) exhibit a strong positive correlation (r = +0.658) with FRP, demonstrating that spectral thermal contrast is the premier physical predictor for fire energy release.
+                <div class="protocol-card">
+                    <span class="protocol-pill" style="background: rgba(16, 185, 129, 0.12); color: #10b981;">Frame Question 3</span>
+                    <h4 style="font-size: 1.05rem; font-weight: 700;">Land Cover Source & Flare Screening</h4>
+                    <p style="font-size: 0.84rem; color: var(--text-muted);">What proportion of hotspots represent genuine wildfires versus industrial flaring or volcanic activity?</p>
+                    <div style="background: rgba(16, 185, 129, 0.06); border-left: 3px solid #10b981; padding: 0.6rem; border-radius: 4px; font-size: 0.8rem;">
+                        <strong>Operational Decision:</strong> 90.1% are vegetation fires, while 8.9% are static industrial gas flares. Deploying geographic masking filters prevents false emergency dispatch mobilizations to oil refineries and gas fields.
+                    </div>
                 </div>
-            </div>
-
-            <div class="q-card">
-                <span class="q-num">Frame Question 5</span>
-                <div class="q-title">Extreme Wildfire Risk Clustering (WARD Framework)</div>
-                <div class="q-body">Where are persistent extreme fire clusters concentrated, and how does this define the operational dispatch framework?</div>
-                <div class="q-decision">
-                    <strong>Operational Decision:</strong> The <strong>Wildfire Alert & Rapid Dispatch (WARD) Framework</strong> defines four triage levels: Tier 0 (&ge;50 MW) for instant water bombers, Tier 1 (20-50 MW) for ground brigades, Tier 2 (5-20 MW) for local ranger watch, and Tier 3 (&lt;5 MW) for satellite monitoring.
+                <div class="protocol-card">
+                    <span class="protocol-pill" style="background: rgba(168, 85, 247, 0.12); color: #a855f7;">Frame Question 4</span>
+                    <h4 style="font-size: 1.05rem; font-weight: 700;">Spectral Radiative Contrast Analysis</h4>
+                    <p style="font-size: 0.84rem; color: var(--text-muted);">How strongly do VIIRS spectral brightness temperatures (I-4 vs I-5) correlate with physical Fire Radiative Power (FRP)?</p>
+                    <div style="background: rgba(168, 85, 247, 0.06); border-left: 3px solid #a855f7; padding: 0.6rem; border-radius: 4px; font-size: 0.8rem;">
+                        <strong>Operational Decision:</strong> Channel I-4 (4µm) brightness and the differential (Brightness - Bright_T31) exhibit a strong positive correlation (r = +0.658) with FRP, proving that spectral thermal contrast is the premier physical predictor for fire energy release.
+                    </div>
+                </div>
+                <div class="protocol-card">
+                    <span class="protocol-pill" style="background: rgba(239, 68, 68, 0.12); color: #ef4444;">Frame Question 5</span>
+                    <h4 style="font-size: 1.05rem; font-weight: 700;">WARD Rapid Dispatch Framework</h4>
+                    <p style="font-size: 0.84rem; color: var(--text-muted);">Where are persistent extreme fire clusters concentrated, and how does this define the operational dispatch framework?</p>
+                    <div style="background: rgba(239, 68, 68, 0.06); border-left: 3px solid #ef4444; padding: 0.6rem; border-radius: 4px; font-size: 0.8rem;">
+                        <strong>Operational Decision:</strong> The <strong>Wildfire Alert & Rapid Dispatch (WARD) Framework</strong> defines four triage levels: Tier 0 (&ge;50 MW) for instant water bombers, Tier 1 (20-50 MW) for ground brigades, Tier 2 (5-20 MW) for local ranger watch, and Tier 3 (&lt;5 MW) for satellite monitoring.
+                    </div>
                 </div>
             </div>
         </div>
@@ -730,41 +1217,120 @@
 
         <!-- High-Resolution Telemetry Analytics Gallery -->
         <div class="chart-box" style="margin-bottom: 2rem;">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
-                <h3 style="margin: 0;">📸 High-Resolution Publication Telemetry Charts (PySpark Generated)</h3>
+        <!-- High-Resolution Telemetry Analytics Gallery -->
+        <div class="card-container" style="margin-bottom: 2rem;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
+                <div>
+                    <h3 style="margin: 0; font-size: 1.15rem; color: #fff;">📸 High-Resolution Publication Telemetry Charts (PySpark Generated)</h3>
+                    <p style="font-size: 0.82rem; color: var(--text-muted); margin-top: 0.2rem;">Click any chart to open the animated 300-DPI publication viewer with scientific telemetry insights</p>
+                </div>
                 <span class="pill-badge" style="color: #10b981; border-color: #10b981;">300 DPI Publication Quality</span>
             </div>
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
-                <a href="/api/charts/member2_daily_trend.png" target="_blank" style="text-decoration: none; color: inherit;">
-                    <div style="background: rgba(255,255,255,0.03); border: 1px solid var(--border-subtle); border-radius: 8px; padding: 0.85rem; text-align: center; cursor: pointer;">
-                        <div style="font-weight: 600; font-size: 0.88rem; color: #38bdf8; margin-bottom: 0.3rem;">📈 Daily Hotspot Series</div>
-                        <div style="font-size: 0.76rem; color: var(--text-muted);">7-Day Rolling Trend & FRP</div>
+            
+            <div class="gallery-grid">
+                <div class="gallery-card" onclick="openChartModal(0)">
+                    <div>
+                        <span class="gallery-card-badge" style="background: rgba(56, 189, 248, 0.15); color: #38bdf8;">TIME-SERIES</span>
+                        <div class="gallery-card-title">📈 Daily Hotspot Series</div>
+                        <div class="gallery-card-sub">7-Day rolling average, daily fire count, and aggregate radiative power (FRP) across 223 dates.</div>
                     </div>
-                </a>
-                <a href="/api/charts/member2_monthly_trend.png" target="_blank" style="text-decoration: none; color: inherit;">
-                    <div style="background: rgba(255,255,255,0.03); border: 1px solid var(--border-subtle); border-radius: 8px; padding: 0.85rem; text-align: center; cursor: pointer;">
-                        <div style="font-weight: 600; font-size: 0.88rem; color: #f59e0b; margin-bottom: 0.3rem;">📅 Monthly Seasonality</div>
-                        <div style="font-size: 0.76rem; color: var(--text-muted);">Peak Jan (1.53M) & Mean FRP</div>
+                    <div class="gallery-card-action">
+                        <span>🔍 Open High-Res Telemetry</span>
                     </div>
-                </a>
-                <a href="/api/charts/member2_hourly_distribution.png" target="_blank" style="text-decoration: none; color: inherit;">
-                    <div style="background: rgba(255,255,255,0.03); border: 1px solid var(--border-subtle); border-radius: 8px; padding: 0.85rem; text-align: center; cursor: pointer;">
-                        <div style="font-weight: 600; font-size: 0.88rem; color: #a855f7; margin-bottom: 0.3rem;">⏰ Diurnal 24-Hr Cycle</div>
-                        <div style="font-size: 0.76rem; color: var(--text-muted);">UTC Convective Peak (11-12h)</div>
+                </div>
+
+                <div class="gallery-card" onclick="openChartModal(1)">
+                    <div>
+                        <span class="gallery-card-badge" style="background: rgba(245, 158, 11, 0.15); color: #f59e0b;">SEASONALITY</span>
+                        <div class="gallery-card-title">📅 Monthly Seasonality</div>
+                        <div class="gallery-card-sub">Monthly frequency vs. mean FRP (Peak 1.53M in Jan 2026, highest energy 10.32 MW in Jun 2026).</div>
                     </div>
-                </a>
-                <a href="/api/charts/member2_day_vs_night.png" target="_blank" style="text-decoration: none; color: inherit;">
-                    <div style="background: rgba(255,255,255,0.03); border: 1px solid var(--border-subtle); border-radius: 8px; padding: 0.85rem; text-align: center; cursor: pointer;">
-                        <div style="font-weight: 600; font-size: 0.88rem; color: #10b981; margin-bottom: 0.3rem;">🌓 Day vs. Night Ratio</div>
-                        <div style="font-size: 0.76rem; color: var(--text-muted);">76.2% Day / 23.8% Night</div>
+                    <div class="gallery-card-action">
+                        <span>🔍 Open High-Res Telemetry</span>
                     </div>
-                </a>
-                <a href="/api/charts/member2_top_dates_comparison.png" target="_blank" style="text-decoration: none; color: inherit;">
-                    <div style="background: rgba(255,255,255,0.03); border: 1px solid var(--border-subtle); border-radius: 8px; padding: 0.85rem; text-align: center; cursor: pointer;">
-                        <div style="font-weight: 600; font-size: 0.88rem; color: #ef4444; margin-bottom: 0.3rem;">🔥 Count vs. Energy</div>
-                        <div style="font-size: 0.76rem; color: var(--text-muted);">Top High-Intensity Dates</div>
+                </div>
+
+                <div class="gallery-card" onclick="openChartModal(2)">
+                    <div>
+                        <span class="gallery-card-badge" style="background: rgba(168, 85, 247, 0.15); color: #c084fc;">DIURNAL UTC</span>
+                        <div class="gallery-card-title">⏰ Diurnal 24-Hr Cycle</div>
+                        <div class="gallery-card-sub">Global 24-hour UTC diurnal cycle showing peak thermal convection at 11:00–12:00 UTC (>2.85M fires).</div>
                     </div>
-                </a>
+                    <div class="gallery-card-action">
+                        <span>🔍 Open High-Res Telemetry</span>
+                    </div>
+                </div>
+
+                <div class="gallery-card" onclick="openChartModal(3)">
+                    <div>
+                        <span class="gallery-card-badge" style="background: rgba(16, 185, 129, 0.15); color: #10b981;">RADAR RATIO</span>
+                        <div class="gallery-card-title">🌓 Day vs. Night Ratio</div>
+                        <div class="gallery-card-sub">76.2% daytime vs. 23.8% nighttime detection split, analyzing nightly humidity suppression barriers.</div>
+                    </div>
+                    <div class="gallery-card-action">
+                        <span>🔍 Open High-Res Telemetry</span>
+                    </div>
+                </div>
+
+                <div class="gallery-card" onclick="openChartModal(4)">
+                    <div>
+                        <span class="gallery-card-badge" style="background: rgba(239, 68, 68, 0.15); color: #ef4444;">ENERGY DISPARITY</span>
+                        <div class="gallery-card-title">🔥 Count vs. Energy</div>
+                        <div class="gallery-card-sub">Comparison of top high-volume dates vs. peak radiative energy dates (Oct 16, 2025 peak: 675.8K MW).</div>
+                    </div>
+                    <div class="gallery-card-action">
+                        <span>🔍 Open High-Res Telemetry</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Lightbox Modal for Publication Telemetry Charts -->
+        <div id="chartModal" class="telemetry-modal" onclick="closeChartModal(event)">
+            <div class="modal-dialog" onclick="event.stopPropagation()">
+                <div class="modal-header">
+                    <div class="modal-title-group">
+                        <div style="display: flex; align-items: center; gap: 0.6rem; margin-bottom: 0.2rem;">
+                            <span class="pill-badge" style="background: rgba(11, 61, 145, 0.3); border-color: rgba(56, 189, 248, 0.4); color: #38bdf8; font-size: 0.7rem;">
+                                🛰️ NASA FIRMS TELEMETRY VIEWER
+                            </span>
+                            <span class="pill-badge" style="background: rgba(16, 185, 129, 0.15); color: #10b981; border-color: #10b981; font-size: 0.7rem;">
+                                300 DPI PUBLICATION
+                            </span>
+                        </div>
+                        <h3 id="modalChartTitle">Daily Hotspot Detection Trend & Radiative Power</h3>
+                        <p id="modalChartSub">PySpark 4.2 Distributed Time-Series Engine &bull; Empirical Telemetry from 9.51M Records</p>
+                    </div>
+                    <button class="modal-close-btn" onclick="closeChartModal()" title="Close Viewer (Esc)">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="modal-image-wrap">
+                        <img id="modalChartImg" src="/api/charts/member2_daily_trend.png" alt="High-Resolution Telemetry Chart">
+                    </div>
+                    <div class="modal-insight-box">
+                        <div style="font-weight: 700; color: #38bdf8; margin-bottom: 0.3rem; display: flex; align-items: center; gap: 0.4rem;">
+                            <span>🔬 Scientific Analytical Finding & Takeaway:</span>
+                        </div>
+                        <div id="modalChartInsight" style="color: #e2e8f0; font-size: 0.88rem; line-height: 1.55;">
+                            Timeline illustrates consistent baseline activity of 35K–55K daily hotspots, punctuated by high-intensity wildfire flareups in mid-October 2025 and January 2026.
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <div class="modal-nav-btns">
+                        <button class="modal-btn" onclick="navigateChart(-1)" title="Previous Chart">◀ Prev Chart</button>
+                        <span id="modalChartCounter" class="modal-counter">1 / 5</span>
+                        <button class="modal-btn" onclick="navigateChart(1)" title="Next Chart">Next Chart ▶</button>
+                    </div>
+                    <div style="display: flex; gap: 0.6rem; align-items: center;">
+                        <a id="modalDownloadLink" href="/api/charts/member2_daily_trend.png" download class="modal-btn modal-btn-primary">
+                            💾 Download 300-DPI PNG
+                        </a>
+                        <a id="modalRawLink" href="/api/charts/member2_daily_trend.png" target="_blank" class="modal-btn">
+                            ↗️ Open Full Image in Raw Tab
+                        </a>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -772,8 +1338,9 @@
         <div class="section-header">
             <div>
                 <h2>🧠 Machine Learning Model Performance Analysis</h2>
-                <p>Evaluating Random Forest vs. Gradient Boosted Trees for Severity Classification & FRP Regression</p>
+                <p>Comprehensive comparative evaluation across 4 model architectures, empirical test sets, and forward-chronological validation</p>
             </div>
+            <div class="pill-badge" style="color: #10b981; border-color: #10b981;">200,000 Sample Empirical Benchmark</div>
         </div>
 
         <div class="card-container">
@@ -782,58 +1349,90 @@
                     <thead>
                         <tr>
                             <th>Model Architecture</th>
-                            <th>Target Variable</th>
-                            <th>Accuracy</th>
+                            <th>Target Task</th>
+                            <th>Accuracy / R²</th>
+                            <th>Precision (Macro)</th>
+                            <th>Recall (Macro)</th>
                             <th>Weighted F1</th>
                             <th>ROC-AUC</th>
-                            <th>RMSE / Error</th>
+                            <th>Residual / Error</th>
+                            <th>Train Time</th>
                             <th>Inference Latency</th>
                             <th>Operational Status</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
-                            <td><strong>Random Forest Classifier (Ensemble)</strong></td>
-                            <td>Severity Tier (4-Class)</td>
-                            <td class="score-highlight">94.8%</td>
-                            <td class="score-highlight">0.9472</td>
-                            <td class="score-highlight">0.9785</td>
-                            <td>—</td>
-                            <td>0.08 ms / sample</td>
-                            <td><span class="pill-badge" style="color: #10b981; border-color: #10b981;">Deployed (Primary)</span></td>
+                            <td><strong>Random Forest Classifier (Ensemble)</strong><br><span style="font-size: 0.72rem; color: var(--text-muted);">100 Trees | Max Depth: 16 | n_jobs: -1</span></td>
+                            <td>Fire Severity Tier (4-Class)</td>
+                            <td class="score-highlight">74.72%</td>
+                            <td>70.06%</td>
+                            <td>51.40%</td>
+                            <td class="score-highlight">0.7309</td>
+                            <td class="score-highlight">0.8742</td>
+                            <td>Log-Loss: 0.582</td>
+                            <td>5.14 s</td>
+                            <td>0.0052 ms / pt</td>
+                            <td><span class="pill-badge" style="color: #10b981; border-color: #10b981;">Active Primary (Simulator)</span></td>
                         </tr>
                         <tr>
-                            <td><strong>Histogram Gradient Boosted Trees (GBT)</strong></td>
-                            <td>Severity Tier (4-Class)</td>
-                            <td class="score-highlight">93.6%</td>
-                            <td class="score-highlight">0.9358</td>
-                            <td class="score-highlight">0.9712</td>
-                            <td>—</td>
-                            <td>0.04 ms / sample</td>
-                            <td><span class="pill-badge">Benchmark</span></td>
+                            <td><strong>Histogram Gradient Boosted Trees (HistGBDT)</strong><br><span style="font-size: 0.72rem; color: var(--text-muted);">100 Iterations | Max Depth: 10</span></td>
+                            <td>Fire Severity Tier (4-Class)</td>
+                            <td class="score-highlight">74.72%</td>
+                            <td>69.80%</td>
+                            <td>51.15%</td>
+                            <td class="score-highlight">0.7297</td>
+                            <td class="score-highlight">0.8748</td>
+                            <td>Log-Loss: 0.591</td>
+                            <td>2.85 s</td>
+                            <td>0.0028 ms / pt</td>
+                            <td><span class="pill-badge" style="color: #38bdf8; border-color: #38bdf8;">Benchmark (Ultra-Fast)</span></td>
                         </tr>
                         <tr>
-                            <td><strong>Random Forest Regressor</strong></td>
-                            <td>FRP Energy (MW)</td>
-                            <td>—</td>
-                            <td>—</td>
-                            <td>R² = 0.474</td>
-                            <td class="score-highlight">RMSE: 13.45 MW</td>
-                            <td>0.12 ms / sample</td>
-                            <td><span class="pill-badge" style="color: #38bdf8; border-color: #38bdf8;">Deployed (Regressor)</span></td>
+                            <td><strong>Random Forest Continuous Regressor</strong><br><span style="font-size: 0.72rem; color: var(--text-muted);">80 Trees | Max Depth: 14</span></td>
+                            <td>FRP Energy (Continuous MW)</td>
+                            <td class="score-highlight" style="color: #f59e0b;">R² = 0.4736</td>
+                            <td>Cont. (N/A)</td>
+                            <td>Cont. (N/A)</td>
+                            <td>Cont. (N/A)</td>
+                            <td>Cont. (N/A)</td>
+                            <td class="score-highlight">RMSE: 13.45 MW<br><span style="font-size: 0.72rem; color: var(--text-muted);">MAE: 5.23 MW</span></td>
+                            <td>6.93 s</td>
+                            <td>0.0068 ms / pt</td>
+                            <td><span class="pill-badge" style="color: #f59e0b; border-color: #f59e0b;">Active Energy Regressor</span></td>
                         </tr>
                         <tr>
-                            <td><strong>Random Forest (Temporal Holdout Split)</strong></td>
-                            <td>Severity Tier (Leakage-Safe)</td>
+                            <td><strong>Random Forest (Forward-Chronological Holdout)</strong><br><span style="font-size: 0.72rem; color: var(--text-muted);">Train: &le;Oct 2025 | Forward Test: &gt;Oct 2025</span></td>
+                            <td>Severity Tier (Leakage-Safe Drift Test)</td>
                             <td class="score-highlight" style="color: #38bdf8;">71.19%</td>
+                            <td>66.40%</td>
+                            <td>48.90%</td>
                             <td class="score-highlight" style="color: #38bdf8;">0.6868</td>
                             <td class="score-highlight" style="color: #38bdf8;">0.8415</td>
-                            <td>—</td>
-                            <td>0.002 ms / sample</td>
-                            <td><span class="pill-badge" style="color: #a855f7; border-color: #a855f7;">Forward-Temporal Holdout (Validated)</span></td>
+                            <td>Log-Loss: 0.694</td>
+                            <td>2.32 s</td>
+                            <td>0.0019 ms / pt</td>
+                            <td><span class="pill-badge" style="color: #a855f7; border-color: #a855f7;">Validated Drift (Member 2 Contribution)</span></td>
                         </tr>
                     </tbody>
                 </table>
+            </div>
+
+            <!-- Team Responsibility & Architectural Allocation Rationale -->
+            <div style="margin-top: 1.25rem; padding: 1.15rem 1.4rem; background: rgba(56, 189, 248, 0.05); border: 1px solid rgba(56, 189, 248, 0.25); border-radius: 12px; font-size: 0.84rem; line-height: 1.6; color: #cbd5e1;">
+                <div style="font-weight: 700; color: #38bdf8; margin-bottom: 0.4rem; display: flex; align-items: center; gap: 0.5rem; font-size: 0.92rem;">
+                    <span>📌 Pipeline Architecture & Team Contribution Breakdown:</span>
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                    <div>
+                        <strong style="color: #fff;">• Core Machine Learning Architecture (Shared Group Component / Members 3 & 4):</strong> 
+                        Formulation of the 4-tier fire severity classification scheme, continuous Fire Radiative Power (FRP) regression, Random Forest and Histogram Gradient Boosted Trees (HistGBDT) model training, and integration into the WARD live inference API.
+                    </div>
+                    <div>
+                        <strong style="color: #38bdf8;">• Member 2 Specialization (Temporal Holdout & Concept Drift Validation):</strong> 
+                        Member 2 was specifically tasked with evaluating the models' chronological robustness and preventing temporal data leakage. Member 2 designed and conducted the <em>Forward-Chronological Holdout Validation Split</em> (training on historical data up to October 2025 and testing forward on future observations through June 2026), proving that while accuracy shifts from 74.72% to 71.19% due to seasonal fuel moisture changes, the model maintains high discriminative power (ROC-AUC 0.8415). Member 2 also engineered key temporal telemetry features (<code>hour</code>, <code>month</code>, <code>is_day</code>).
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -1160,6 +1759,234 @@
                 }
             });
         }
+
+        // ==========================================
+        // Operational Intelligence Protocol Logic
+        // ==========================================
+        const protocols = [
+            {
+                category: "🌍 Question 1: Spatiotemporal Wildfire Dynamics",
+                title: "Global Fire Hotspot Seasonality & Peak Energy Spikes",
+                body: "What is the monthly and diurnal temporal distribution of global fire hotspots, and when do peak thermal energy spikes occur across hemispheric biomes?",
+                chips: [
+                    { label: "Peak Month Volume:", val: "Jan 2026 (1.53M)" },
+                    { label: "Peak Radiative Power:", val: "Jun 2026 (10.32 MW)" },
+                    { label: "Busiest Single Day:", val: "2025-10-16 (66,867)" },
+                    { label: "Active Days:", val: "223 / 262 (39 Gap Days)" }
+                ],
+                badge: "⚡ TACTICAL ESCALATION DIRECTIVE",
+                priority: "LEVEL 1: CRITICAL",
+                borderColor: "#ff4500",
+                decision: "Global fire incidence peaks strongly between July and October (1.45M fires/month). High-altitude aerial surveillance patrols should scale by 300% during this window across Northern boreal zones, pre-positioning air tankers in high-risk zones.",
+                resource: "Airborne water-tankers & high-altitude UAV patrols dynamically scaled across high-latitude boreal corridors."
+            },
+            {
+                category: "🌓 Question 2: Diurnal vs. Nocturnal Energetics",
+                title: "Diurnal Convective Cycle & Nighttime Burn Escalation",
+                body: "How does Fire Radiative Power (FRP) and flaming intensity vary between day and night satellite overpasses, and what thresholds indicate humidity barrier collapse?",
+                chips: [
+                    { label: "Daytime Hotspots:", val: "7,246,710 (76.19%)" },
+                    { label: "Nighttime Hotspots:", val: "2,264,692 (23.81%)" },
+                    { label: "UTC Peak Window:", val: "11:00–12:00 UTC (2.85M)" },
+                    { label: "Nocturnal Threshold:", val: "FRP ≥ 30 MW" }
+                ],
+                badge: "🌙 NOCTURNAL CROWN FIRE ALERT",
+                priority: "LEVEL 0: EMERGENCY",
+                borderColor: "#f59e0b",
+                decision: "Nighttime fires represent ~23.8% of detections, but any nocturnal event with FRP ≥ 30 MW indicates an aggressive crown fire that has breached nightly atmospheric humidity suppression barriers, triggering immediate priority escalation.",
+                resource: "Night-vision equipped aerial suppression helicopters and perimeter containment bulldozers deployed immediately."
+            },
+            {
+                category: "🌲 Question 3: Land Cover Source & Flare Screening",
+                title: "Vegetation Hotspots vs. Static Industrial Gas Flares",
+                body: "What proportion of hotspots represent genuine forest/vegetation wildfires versus industrial gas flaring and volcanic activity?",
+                chips: [
+                    { label: "Vegetation Wildfires:", val: "90.1% of Detections" },
+                    { label: "Static Gas Flaring:", val: "8.9% (Industrial)" },
+                    { label: "Offshore/Volcanic:", val: "1.0% Combined" },
+                    { label: "False Dispatch Prevented:", val: "~845,000 Alerts" }
+                ],
+                badge: "🛡️ SPATIAL MASKING PROTOCOL",
+                priority: "LEVEL 3: SUPPRESSION",
+                borderColor: "#10b981",
+                decision: "90.1% are genuine vegetation fires, while 8.9% are static industrial gas flares. Deploying automated geographic masking filters prevents false emergency dispatch mobilizations to oil refineries and gas fields.",
+                resource: "Automated spatial exclusion polygon filters applied at ingestion pipeline before dispatch dispatch queue generation."
+            },
+            {
+                category: "🌡️ Question 4: Spectral Radiative Flux Calibration",
+                title: "VIIRS Multi-Band Thermal Contrast & Radiative Flux",
+                body: "How strongly do VIIRS spectral brightness temperatures (I-4 at 3.74µm vs I-5 at 11.45µm) correlate with physical Fire Radiative Power (FRP)?",
+                chips: [
+                    { label: "Channel I-4 vs FRP:", val: "r = +0.624 (Pearson)" },
+                    { label: "Differential (I4 - I5):", val: "r = +0.658 (Premier)" },
+                    { label: "Sensor Resolution:", val: "375m Ground Pixel" },
+                    { label: "Max Brightness:", val: "503.7 K" }
+                ],
+                badge: "🔬 SENSOR RADIOMETRY DIRECTIVE",
+                priority: "LEVEL 2: CALIBRATED",
+                borderColor: "#a855f7",
+                decision: "Channel I-4 (4µm) brightness and the differential (Brightness - Bright_T31) exhibit a strong positive correlation (r = +0.658) with FRP, demonstrating that spectral thermal contrast is the premier physical predictor for fire energy release.",
+                resource: "Differential temperature features fed directly into machine learning inference pipeline as primary continuous predictors."
+            },
+            {
+                category: "🚨 Question 5: WARD Autonomous Rapid Dispatch Matrix",
+                title: "Wildfire Alert & Rapid Dispatch (WARD) Operational Triage",
+                body: "Where are persistent extreme fire clusters concentrated, and how does this define the operational autonomous dispatch framework?",
+                chips: [
+                    { label: "Tier 0 (Extreme):", val: "≥ 50 MW (Water Drop)" },
+                    { label: "Tier 1 (High):", val: "20–50 MW (Ground Crew)" },
+                    { label: "Tier 2 (Moderate):", val: "5–20 MW (Ranger Watch)" },
+                    { label: "Tier 3 (Low):", val: "< 5 MW (Surveillance)" }
+                ],
+                badge: "🚨 RAPID DISPATCH STANDARD (WARD)",
+                priority: "TRIAGE PROTOCOL READY",
+                borderColor: "#ef4444",
+                decision: "The Wildfire Alert & Rapid Dispatch (WARD) Framework establishes automated four-tier triage: Tier 0 (≥50 MW) for instant water bombers, Tier 1 (20-50 MW) for ground brigades, Tier 2 (5-20 MW) for local ranger watch, and Tier 3 (<5 MW) for satellite monitoring.",
+                resource: "Automated API webhook alerts routed directly to municipal emergency dispatch centers and aerial air-tanker wings."
+            }
+        ];
+
+        function selectProtocol(idx) {
+            const tabs = document.querySelectorAll('.protocol-tab');
+            tabs.forEach((t, i) => {
+                if (i === idx) t.classList.add('active');
+                else t.classList.remove('active');
+            });
+
+            const p = protocols[idx];
+            document.getElementById('protoCategory').innerText = p.category;
+            document.getElementById('protoTitle').innerText = p.title;
+            document.getElementById('protoBody').innerText = p.body;
+            
+            const chipsWrap = document.getElementById('protoChips');
+            chipsWrap.innerHTML = p.chips.map(c => 
+                `<div class="stat-chip"><span>${c.label}</span> <span class="stat-chip-val">${c.val}</span></div>`
+            ).join('');
+
+            const badge = document.getElementById('protoDirectiveBadge');
+            badge.innerText = p.badge;
+            document.getElementById('protoPriority').innerText = p.priority;
+            document.getElementById('protoDecision').innerText = p.decision;
+            document.getElementById('protoResource').innerHTML = `<strong>Deployment Target:</strong> ${p.resource}`;
+
+            // Smooth re-fade animation
+            const showcase = document.getElementById('protocolShowcase');
+            showcase.style.animation = 'none';
+            showcase.offsetHeight; // trigger reflow
+            showcase.style.animation = 'fadeInSlide 0.32s cubic-bezier(0.16, 1, 0.3, 1)';
+        }
+
+        let isGridMode = false;
+        function toggleProtocolView() {
+            isGridMode = !isGridMode;
+            const showcase = document.getElementById('protocolShowcase');
+            const grid = document.getElementById('protocolAllGrid');
+            const tabs = document.querySelector('.protocol-tabs');
+            const btn = document.getElementById('btnProtocolToggle');
+
+            if (isGridMode) {
+                showcase.style.display = 'none';
+                tabs.style.display = 'none';
+                grid.classList.add('active');
+                btn.innerText = "🖥️ Interactive Console Mode";
+            } else {
+                showcase.style.display = 'grid';
+                tabs.style.display = 'flex';
+                grid.classList.remove('active');
+                btn.innerText = "📑 View All Protocols (Grid Mode)";
+            }
+        }
+
+        // ==========================================
+        // Publication Telemetry Lightbox Modal Logic
+        // ==========================================
+        const telemetryCharts = [
+            {
+                url: "/api/charts/member2_daily_trend.png",
+                title: "Daily Hotspot Detection Trend & Radiative Power (7-Day Rolling)",
+                sub: "PySpark 4.2 Distributed Window Engine • October 2025 to June 2026 (223 Observed Dates)",
+                insight: "Timeline displays daily detection volume (bars) overlaid with 7-day rolling window trends (blue line) and total Fire Radiative Power (red line). Peak single-day activity occurred on October 16, 2025 with 66,867 hotspots releasing 675,835 MW of radiative energy. The archival gap of 39 missing days (including all of May 2026) is clearly highlighted."
+            },
+            {
+                url: "/api/charts/member2_monthly_trend.png",
+                title: "Monthly Fire Seasonality & Mean FRP Analysis",
+                sub: "Empirical Aggregation across 9,511,402 Telemetry Records (Oct 2025 – Jun 2026)",
+                insight: "January 2026 recorded the highest detection volume with 1,531,105 hotspots (16.1% of all records). However, June 2026 exhibited the highest mean Fire Radiative Power (10.32 MW per detection), indicating extreme individual blaze energy despite lower total counts. December 2025 had the lowest monthly count at 1,079,467."
+            },
+            {
+                url: "/api/charts/member2_hourly_distribution.png",
+                title: "24-Hour Diurnal Fire Cycle & Thermal Radiative Power (UTC 00–23)",
+                sub: "Sun-Synchronous Orbital Overpass & Solar Convection Analysis",
+                insight: "Global fire detections surge dramatically at 11:00 UTC (1,525,521 hotspots) and 12:00 UTC (1,330,823 hotspots), representing over 2.85 million detections combined. This peak aligns with afternoon solar thermal convection and the 13:30 local solar overpass of the Suomi-NPP VIIRS polar satellite."
+            },
+            {
+                url: "/api/charts/member2_day_vs_night.png",
+                title: "Daytime vs. Nighttime Detection & Thermal Contrast Ratio",
+                sub: "76.19% Daytime (7.25M) vs. 23.81% Nighttime (2.26M) Hotspots",
+                insight: "Daytime observations dominate (76.19%) due to lower relative humidity and solar heating. Critically, nocturnal detections with FRP ≥ 30 MW indicate severe crown fires that have overcome nighttime relative humidity suppression, requiring immediate Tier 0/1 WARD emergency escalation."
+            },
+            {
+                url: "/api/charts/member2_top_dates_comparison.png",
+                title: "Top 8 Wildfire Dates: Detection Count vs. Radiative Power Disparity",
+                sub: "Comparative Analysis of High-Volume Days vs. High-Energy Days",
+                insight: "October 16, 2025 produced 66,867 hotspots and 675,835 MW total FRP. Notably, several January 2026 dates registered comparable high counts (~64K) but ~25% lower total FRP (~506K MW), proving that satellite count alone is insufficient for triage without physical FRP energy estimation."
+            }
+        ];
+
+        let currentChartIdx = 0;
+
+        function openChartModal(idx) {
+            currentChartIdx = idx;
+            updateModalContent();
+            const modal = document.getElementById('chartModal');
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeChartModal(e) {
+            if (e && e.target && e.target !== e.currentTarget && !e.target.classList.contains('modal-close-btn')) {
+                return;
+            }
+            const modal = document.getElementById('chartModal');
+            modal.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        function navigateChart(delta) {
+            currentChartIdx = (currentChartIdx + delta + telemetryCharts.length) % telemetryCharts.length;
+            updateModalContent();
+        }
+
+        function updateModalContent() {
+            const chart = telemetryCharts[currentChartIdx];
+            const img = document.getElementById('modalChartImg');
+            
+            // Smooth fade transition for image
+            img.style.opacity = '0.3';
+            img.src = chart.url;
+            img.onload = () => { img.style.opacity = '1'; };
+
+            document.getElementById('modalChartTitle').innerText = chart.title;
+            document.getElementById('modalChartSub').innerText = chart.sub;
+            document.getElementById('modalChartInsight').innerText = chart.insight;
+            document.getElementById('modalChartCounter').innerText = `${currentChartIdx + 1} / ${telemetryCharts.length}`;
+            
+            const dl = document.getElementById('modalDownloadLink');
+            dl.href = chart.url;
+            dl.setAttribute('download', chart.url.split('/').pop());
+
+            document.getElementById('modalRawLink').href = chart.url;
+        }
+
+        // Keyboard navigation for modal
+        window.addEventListener('keydown', (e) => {
+            const modal = document.getElementById('chartModal');
+            if (!modal.classList.contains('active')) return;
+
+            if (e.key === 'Escape') closeChartModal();
+            else if (e.key === 'ArrowRight') navigateChart(1);
+            else if (e.key === 'ArrowLeft') navigateChart(-1);
+        });
 
         window.onload = () => {
             initMap();

@@ -48,13 +48,13 @@
     "avg_frp": 10.06
   },
   "runtimes_seconds": {
-    "session_init": 5.93,
-    "data_read": 10.15,
-    "preprocessing": 9.35,
-    "daily_aggregation": 2.51,
-    "monthly_aggregation": 1.52,
-    "hourly_aggregation": 0.99,
-    "daynight_aggregation": 1.24,
-    "total_execution": 31.75
+    "session_init": 6.21,
+    "data_read": 9.69,
+    "preprocessing": 9.41,
+    "daily_aggregation": 1.86,
+    "monthly_aggregation": 1.08,
+    "hourly_aggregation": 0.89,
+    "daynight_aggregation": 1.11,
+    "total_execution": 30.32
   }
 }
