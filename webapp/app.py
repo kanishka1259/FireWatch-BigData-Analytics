@@ -157,7 +157,7 @@ def get_temporal():
         
     return jsonify({
         "status": "success",
-        "role": "Member 2 - Temporal Analysis",
+        "role": "Temporal Analysis & Diurnal Dynamics",
         "summary": summary,
         "monthly": monthly,
         "hourly": hourly,
