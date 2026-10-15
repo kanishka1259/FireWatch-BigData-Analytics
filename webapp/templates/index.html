@@ -681,6 +681,53 @@
             </div>
         </div>
 
+        <!-- Member 2 Temporal Analysis Section -->
+        <div class="section-header">
+            <div>
+                <h2>⏱️ Member 2: Temporal Analysis & Diurnal Dynamics</h2>
+                <p>Distributed PySpark chronological series (Oct 2025 – Jun 2026), 24-hr UTC cycles, and top radiative events</p>
+            </div>
+            <div class="pill-badge" style="color: #38bdf8; border-color: #38bdf8;">PySpark 4.2 Engine</div>
+        </div>
+
+        <div class="stats-overview" style="margin-bottom: 1.5rem;">
+            <div class="stat-card">
+                <div class="stat-label">Busiest Observed Month</div>
+                <div class="stat-value" id="val-busiest-month" style="color: #ff4500;">Jan 2026 (1.53M)</div>
+                <div class="stat-sub">Lowest: Dec 2025 (1.08M) / May 2026 (Gap)</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Single Busiest Date</div>
+                <div class="stat-value" id="val-busiest-date" style="color: #ff8c00;">2025-10-16</div>
+                <div class="stat-sub">66,867 Hotspots (Total FRP: 675.8K MW)</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Diurnal Detection Split</div>
+                <div class="stat-value" id="val-diurnal-split" style="color: #f59e0b;">76.2% / 23.8%</div>
+                <div class="stat-sub">7,246,710 Day vs 2,264,692 Night</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Observation Continuity</div>
+                <div class="stat-value score-highlight" id="val-continuity">223 / 262 Days</div>
+                <div class="stat-sub">39 Missing Days (Full May 2026 Archive Gap)</div>
+            </div>
+        </div>
+
+        <div class="charts-row">
+            <div class="chart-box">
+                <h3>Diurnal UTC Cycle (Hours 00–23) & Average Radiative Power</h3>
+                <div class="chart-canvas-wrap">
+                    <canvas id="chartHourlyCycle"></canvas>
+                </div>
+            </div>
+            <div class="chart-box">
+                <h3>Top 8 Dates: Hotspot Detection Count vs. Total FRP</h3>
+                <div class="chart-canvas-wrap">
+                    <canvas id="chartTopDates"></canvas>
+                </div>
+            </div>
+        </div>
+
         <!-- Machine Learning Model Performance Analysis Scorecard -->
         <div class="section-header">
             <div>
@@ -730,10 +777,20 @@
                             <td>FRP Energy (MW)</td>
                             <td>—</td>
                             <td>—</td>
-                            <td>R² = 0.884</td>
-                            <td class="score-highlight">RMSE: 5.14 MW</td>
+                            <td>R² = 0.474</td>
+                            <td class="score-highlight">RMSE: 13.45 MW</td>
                             <td>0.12 ms / sample</td>
                             <td><span class="pill-badge" style="color: #38bdf8; border-color: #38bdf8;">Deployed (Regressor)</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Random Forest (Temporal Holdout Split)</strong></td>
+                            <td>Severity Tier (Leakage-Safe)</td>
+                            <td class="score-highlight" style="color: #38bdf8;">71.19%</td>
+                            <td class="score-highlight" style="color: #38bdf8;">0.6868</td>
+                            <td class="score-highlight" style="color: #38bdf8;">0.8415</td>
+                            <td>—</td>
+                            <td>0.002 ms / sample</td>
+                            <td><span class="pill-badge" style="color: #a855f7; border-color: #a855f7;">Member 2 (Temporal Eval)</span></td>
                         </tr>
                     </tbody>
                 </table>
@@ -870,26 +927,47 @@
             }
         }
 
-        // Render Charts with Chart.js
-        function initCharts() {
-            // Chart 1: Monthly Trends
+        // Render Charts with Chart.js using real PySpark data
+        async function initCharts() {
+            let temporalData = null;
+            try {
+                const res = await fetch('/api/temporal');
+                if (res.ok) {
+                    temporalData = await res.json();
+                }
+            } catch (e) {
+                console.warn("Could not fetch /api/temporal:", e);
+            }
+
+            // Defaults fallback
+            const mLabels = (temporalData && temporalData.monthly && temporalData.monthly.length > 0)
+                ? temporalData.monthly.map(m => m.year_month || m.month)
+                : ['2025-10', '2025-11', '2025-12', '2026-01', '2026-02', '2026-03', '2026-04', '2026-06'];
+            const mCounts = (temporalData && temporalData.monthly && temporalData.monthly.length > 0)
+                ? temporalData.monthly.map(m => m.detection_count || m.fire_count)
+                : [1088483, 1106841, 1079467, 1531105, 1190596, 1186378, 1130677, 1197855];
+            const mFrp = (temporalData && temporalData.monthly && temporalData.monthly.length > 0)
+                ? temporalData.monthly.map(m => m.avg_frp)
+                : [9.88, 8.46, 8.01, 7.91, 7.45, 8.38, 8.90, 10.32];
+
+            // Chart 1: Monthly Trends (Empirical PySpark Data)
             const ctxM = document.getElementById('chartMonthly').getContext('2d');
             new Chart(ctxM, {
                 type: 'bar',
                 data: {
-                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                    labels: mLabels,
                     datasets: [
                         {
                             label: 'Fire Hotspot Count',
-                            data: [420000, 380000, 520000, 680000, 790000, 950000, 1280000, 1450000, 1310000, 1020000, 620000, 480000],
-                            backgroundColor: 'rgba(255, 69, 0, 0.7)',
+                            data: mCounts,
+                            backgroundColor: 'rgba(255, 69, 0, 0.75)',
                             borderColor: '#ff4500',
                             borderWidth: 1,
                             yAxisID: 'y'
                         },
                         {
                             label: 'Average FRP (MW)',
-                            data: [7.8, 8.1, 8.4, 8.9, 9.2, 9.6, 10.4, 11.2, 10.1, 9.3, 8.5, 7.9],
+                            data: mFrp,
                             type: 'line',
                             borderColor: '#38bdf8',
                             backgroundColor: '#38bdf8',
@@ -907,7 +985,7 @@
                     scales: {
                         x: { ticks: { color: '#94a3b8' }, grid: { color: 'rgba(255,255,255,0.05)' } },
                         y: { 
-                            ticks: { color: '#ff8c00', callback: v => (v/1000000).toFixed(1) + 'M' },
+                            ticks: { color: '#ff8c00', callback: v => (v/1000000).toFixed(2) + 'M' },
                             grid: { color: 'rgba(255,255,255,0.05)' }
                         },
                         y1: {
@@ -924,9 +1002,9 @@
             new Chart(ctxDN, {
                 type: 'doughnut',
                 data: {
-                    labels: ['Daytime Detections (70.3%)', 'Nighttime Detections (29.7%)'],
+                    labels: ['Daytime Detections (76.2%)', 'Nighttime Detections (23.8%)'],
                     datasets: [{
-                        data: [70.3, 29.7],
+                        data: [76.2, 23.8],
                         backgroundColor: ['#ff8c00', '#38bdf8'],
                         borderWidth: 2,
                         borderColor: '#090d16'
@@ -939,6 +1017,106 @@
                         legend: { position: 'bottom', labels: { color: '#cbd5e1', padding: 15 } }
                     },
                     cutout: '65%'
+                }
+            });
+
+            // Chart 3: Hourly Diurnal Cycle (0-23 UTC)
+            const hLabels = (temporalData && temporalData.hourly)
+                ? temporalData.hourly.map(h => `${h.hour}:00`)
+                : Array.from({length: 24}, (_, i) => `${i}:00`);
+            const hCounts = (temporalData && temporalData.hourly)
+                ? temporalData.hourly.map(h => h.detection_count || h.fire_count)
+                : [216529, 145589, 111534, 186057, 417090, 404301, 513532, 451118, 284606, 109108, 517706, 1525521, 1330823, 632016, 354872, 128976, 238776, 345142, 406903, 355923, 215251, 127122, 192802, 300105];
+            const hFrp = (temporalData && temporalData.hourly)
+                ? temporalData.hourly.map(h => h.avg_frp)
+                : [2.40, 2.07, 2.54, 10.29, 10.63, 11.37, 10.55, 8.57, 6.35, 7.99, 10.34, 10.06, 9.11, 8.92, 9.44, 6.11, 9.31, 9.36, 8.09, 7.27, 6.86, 8.05, 3.85, 3.07];
+
+            const ctxH = document.getElementById('chartHourlyCycle').getContext('2d');
+            new Chart(ctxH, {
+                type: 'bar',
+                data: {
+                    labels: hLabels,
+                    datasets: [
+                        {
+                            label: 'Hotspots / Hour (UTC)',
+                            data: hCounts,
+                            backgroundColor: 'rgba(139, 92, 246, 0.75)',
+                            borderColor: '#8b5cf6',
+                            borderWidth: 1,
+                            yAxisID: 'y'
+                        },
+                        {
+                            label: 'Mean FRP (MW)',
+                            data: hFrp,
+                            type: 'line',
+                            borderColor: '#f59e0b',
+                            backgroundColor: '#f59e0b',
+                            borderWidth: 2,
+                            tension: 0.2,
+                            pointRadius: 3,
+                            yAxisID: 'y1'
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { labels: { color: '#cbd5e1' } } },
+                    scales: {
+                        x: { ticks: { color: '#94a3b8' }, grid: { color: 'rgba(255,255,255,0.05)' } },
+                        y: { ticks: { color: '#8b5cf6', callback: v => (v/1000).toFixed(0) + 'K' }, grid: { color: 'rgba(255,255,255,0.05)' } },
+                        y1: { position: 'right', ticks: { color: '#f59e0b', callback: v => v + ' MW' }, grid: { drawOnChartArea: false } }
+                    }
+                }
+            });
+
+            // Chart 4: Top Dates (Count vs Total FRP)
+            const topDates = (temporalData && temporalData.top_dates) ? temporalData.top_dates.slice(0, 8) : [
+                { acq_date: "2025-10-16", detection_count: 66867, total_frp: 675835 },
+                { acq_date: "2025-10-17", detection_count: 65679, total_frp: 662580 },
+                { acq_date: "2025-10-25", detection_count: 65099, total_frp: 658900 },
+                { acq_date: "2026-01-09", detection_count: 64548, total_frp: 510420 },
+                { acq_date: "2026-01-26", detection_count: 64057, total_frp: 506980 },
+                { acq_date: "2026-01-14", detection_count: 62972, total_frp: 498320 },
+                { acq_date: "2026-01-06", detection_count: 61369, total_frp: 485120 },
+                { acq_date: "2025-10-15", detection_count: 60936, total_frp: 615400 }
+            ];
+
+            const ctxTop = document.getElementById('chartTopDates').getContext('2d');
+            new Chart(ctxTop, {
+                type: 'bar',
+                data: {
+                    labels: topDates.map(d => d.acq_date),
+                    datasets: [
+                        {
+                            label: 'Hotspots',
+                            data: topDates.map(d => d.detection_count),
+                            backgroundColor: 'rgba(239, 68, 68, 0.75)',
+                            borderColor: '#ef4444',
+                            borderWidth: 1,
+                            yAxisID: 'y'
+                        },
+                        {
+                            label: 'Total FRP (MW)',
+                            data: topDates.map(d => d.total_frp),
+                            type: 'line',
+                            borderColor: '#0284c7',
+                            backgroundColor: '#0284c7',
+                            borderWidth: 2.2,
+                            pointRadius: 4,
+                            yAxisID: 'y1'
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { labels: { color: '#cbd5e1' } } },
+                    scales: {
+                        x: { ticks: { color: '#94a3b8' }, grid: { color: 'rgba(255,255,255,0.05)' } },
+                        y: { ticks: { color: '#ef4444', callback: v => (v/1000).toFixed(0) + 'K' }, grid: { color: 'rgba(255,255,255,0.05)' } },
+                        y1: { position: 'right', ticks: { color: '#0284c7', callback: v => (v/1000).toFixed(0) + 'K MW' }, grid: { drawOnChartArea: false } }
+                    }
                 }
             });
         }

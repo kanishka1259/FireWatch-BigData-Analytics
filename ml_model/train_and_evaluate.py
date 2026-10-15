@@ -28,6 +28,11 @@ from sklearn.metrics import (
 from sklearn.preprocessing import label_binarize
 
 DATA_FILE = "fire_archive_SV-C2_817450.csv"
+if not os.path.exists(DATA_FILE):
+    for alt in ["../fire_archive_SV-C2_817450.csv", os.path.join(os.path.dirname(__file__), "..", "fire_archive_SV-C2_817450.csv")]:
+        if os.path.exists(alt):
+            DATA_FILE = os.path.abspath(alt)
+            break
 MODEL_DIR = "ml_model"
 OUTPUT_DIR = "outputs/data"
 CHART_DIR = "outputs/charts"
@@ -152,6 +157,32 @@ def train_and_evaluate():
     print(f"  Regression Results (FRP in MegaWatts):")
     print(f"  -> RMSE: {reg_rmse:.2f} MW | MAE: {reg_mae:.2f} MW | R2 Score: {reg_r2:.4f} | Explained Var: {reg_ev:.4f}")
 
+    # Temporal Evaluation (Member 2 Requirement: Leakage-Safe Chronological Split)
+    print("\n[Temporal ML Evaluation] Benchmarking Forward-Chronological Holdout Split (Leakage-Safe)...")
+    df_sorted = df_clean.sort_values('acq_date').reset_index(drop=True)
+    split_idx = int(len(df_sorted) * 0.8)
+    cutoff_date = df_sorted.iloc[split_idx]['acq_date']
+    
+    X_train_time = df_sorted.iloc[:split_idx][feature_cols]
+    y_train_c_time = df_sorted.iloc[:split_idx]['severity_tier']
+    X_test_time = df_sorted.iloc[split_idx:][feature_cols]
+    y_test_c_time = df_sorted.iloc[split_idx:]['severity_tier']
+    
+    t_temp_start = time.time()
+    rf_temp = RandomForestClassifier(n_estimators=80, max_depth=14, random_state=42, n_jobs=-1)
+    rf_temp.fit(X_train_time, y_train_c_time)
+    temp_train_time = time.time() - t_temp_start
+    
+    t_temp_eval = time.time()
+    y_pred_time = rf_temp.predict(X_test_time)
+    temp_eval_time = ((time.time() - t_temp_eval) / len(X_test_time)) * 1000
+    
+    temp_acc = accuracy_score(y_test_c_time, y_pred_time)
+    temp_f1_w = f1_score(y_test_c_time, y_pred_time, average='weighted', zero_division=0)
+    print(f"  Chronological Cutoff Date: {cutoff_date}")
+    print(f"  -> Temporal Train Size: {len(X_train_time):,} | Forward Test Size: {len(X_test_time):,}")
+    print(f"  -> Temporal Test Accuracy: {temp_acc*100:.2f}%, F1-Weighted: {temp_f1_w:.4f} (Train: {temp_train_time:.2f}s, Latency: {temp_eval_time:.4f}ms/sample)")
+
     # 5. Save Models, Visualizations & Metrics Report
     print("\n[Step 5/5] Generating Performance Charts and Persisting Artifacts...")
     
@@ -254,6 +285,16 @@ def train_and_evaluate():
             "r2_score": round(float(reg_r2), 4),
             "explained_variance": round(float(reg_ev), 4),
             "training_time_seconds": round(float(reg_train_time), 2)
+        },
+        "temporal_evaluation": {
+            "chronological_cutoff_date": str(cutoff_date),
+            "train_samples": int(len(X_train_time)),
+            "forward_test_samples": int(len(X_test_time)),
+            "forward_test_accuracy": round(float(temp_acc), 4),
+            "forward_test_f1_weighted": round(float(temp_f1_w), 4),
+            "training_time_seconds": round(float(temp_train_time), 2),
+            "inference_latency_per_sample_ms": round(float(temp_eval_time), 4),
+            "temporal_leakage_safe": True
         },
         "feature_importance": {feat: round(float(imp), 4) for feat, imp in zip(sorted_features, sorted_importances)},
         "decision_framework": {

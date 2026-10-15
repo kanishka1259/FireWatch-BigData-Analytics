@@ -8,11 +8,11 @@
     "f1_macro": 0.5527,
     "f1_weighted": 0.7309,
     "roc_auc_weighted": 0.8742,
-    "gbt_accuracy": 0.747,
+    "gbt_accuracy": 0.7472,
     "gbt_f1_weighted": 0.7297,
-    "gbt_roc_auc": 0.8747,
-    "inference_latency_per_sample_ms": 0.0068,
-    "training_time_seconds": 5.83,
+    "gbt_roc_auc": 0.8748,
+    "inference_latency_per_sample_ms": 0.0052,
+    "training_time_seconds": 5.14,
     "confusion_matrix": [
       [
         14183,
@@ -43,11 +43,21 @@
   "regression": {
     "model_name": "Random Forest Regressor",
     "target": "Fire Radiative Power (MW)",
-    "rmse": 13.4508,
-    "mae": 5.2276,
-    "r2_score": 0.4739,
-    "explained_variance": 0.474,
-    "training_time_seconds": 16.96
+    "rmse": 13.4548,
+    "mae": 5.2303,
+    "r2_score": 0.4736,
+    "explained_variance": 0.4736,
+    "training_time_seconds": 6.93
+  },
+  "temporal_evaluation": {
+    "chronological_cutoff_date": "2025-10-15",
+    "train_samples": 160000,
+    "forward_test_samples": 40000,
+    "forward_test_accuracy": 0.7119,
+    "forward_test_f1_weighted": 0.6868,
+    "training_time_seconds": 2.32,
+    "inference_latency_per_sample_ms": 0.0019,
+    "temporal_leakage_safe": true
   },
   "feature_importance": {
     "brightness": 0.3292,

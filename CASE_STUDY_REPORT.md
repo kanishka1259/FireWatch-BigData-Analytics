@@ -116,7 +116,11 @@ Two predictive models were implemented and benchmarked:
 | Artifact | Location | Purpose |
 |---|---|---|
 | **PySpark Engine** | `spark_analysis/pyspark_eda.py` | Distributed data processing across 9.5M rows |
+| **Member 2 Temporal Engine** | `spark_analysis/member2_temporal_analysis.py` | Chronological series, diurnal 24-hr cycle & 7-day rolling window |
 | **EDA Visualizations** | `spark_analysis/generate_visualizations.py` | 6 publication-quality charts in `outputs/charts/` |
-| **ML Models & Evaluation** | `ml_model/train_and_evaluate.py` | Random Forest & GBT models + performance plots |
-| **NoSQL Backend** | `nosql/nosql_store.py` | MongoDB / Document store persistence |
-| **Web Application** | `webapp/app.py` & `webapp/templates/index.html` | Full-stack interactive dashboard |
+| **Member 2 Visualizations** | `spark_analysis/generate_member2_visualizations.py` | 5 publication-quality temporal charts in `outputs/charts/` |
+| **ML Models & Evaluation** | `ml_model/train_and_evaluate.py` | Random Forest & GBT models + temporal holdout evaluation |
+| **NoSQL Backend** | `nosql/nosql_store.py` | MongoDB / Document store persistence with temporal aggregations |
+| **Web Application** | `webapp/app.py` & `webapp/templates/index.html` | Full-stack interactive dashboard with live temporal metrics & Chart.js |
+| **Member 2 Report** | `outputs/MEMBER2_TEMPORAL_ANALYSIS_REPORT.md` | Comprehensive empirical report resolving all temporal research questions |
+

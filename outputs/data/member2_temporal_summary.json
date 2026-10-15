@@ -1,0 +1,60 @@
+{
+  "analysis_role": "Member 2 - Temporal Analysis",
+  "engine": "Apache PySpark 4.x (Spark SQL)",
+  "total_records_ingested": 9511402,
+  "valid_records_analyzed": 9511402,
+  "observation_start_date": "2025-10-12",
+  "observation_end_date": "2026-06-30",
+  "total_calendar_days": 262,
+  "observed_dates_count": 223,
+  "missing_dates_count": 39,
+  "missing_dates_sample": [
+    "2026-03-10",
+    "2026-03-11",
+    "2026-03-12",
+    "2026-04-28",
+    "2026-04-29",
+    "2026-04-30",
+    "2026-05-01",
+    "2026-05-02",
+    "2026-05-03",
+    "2026-05-04",
+    "2026-05-05",
+    "2026-05-06",
+    "2026-05-07",
+    "2026-05-08",
+    "2026-05-09"
+  ],
+  "busiest_date": {
+    "date": "2025-10-16",
+    "hotspot_count": 66867,
+    "avg_frp": 10.11,
+    "total_frp": 675835.21
+  },
+  "busiest_month": {
+    "year_month": "2026-01",
+    "hotspot_count": 1531105,
+    "avg_frp": 7.91
+  },
+  "quietest_month": {
+    "year_month": "2025-12",
+    "hotspot_count": 1079467,
+    "avg_frp": 8.01,
+    "note": "Note incomplete month or sensor coverage if applicable"
+  },
+  "peak_hour_utc": {
+    "hour": 11,
+    "hotspot_count": 1525521,
+    "avg_frp": 10.06
+  },
+  "runtimes_seconds": {
+    "session_init": 5.93,
+    "data_read": 10.15,
+    "preprocessing": 9.35,
+    "daily_aggregation": 2.51,
+    "monthly_aggregation": 1.52,
+    "hourly_aggregation": 0.99,
+    "daynight_aggregation": 1.24,
+    "total_execution": 31.75
+  }
+}

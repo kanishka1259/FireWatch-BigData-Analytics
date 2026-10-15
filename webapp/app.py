@@ -126,6 +126,45 @@ def get_performance():
         return jsonify(data)
     return jsonify({"error": "Performance metrics not yet generated. Run train_and_evaluate.py first."})
 
+@app.route("/api/temporal")
+def get_temporal():
+    summary_path = os.path.join(DATA_DIR, "member2_temporal_summary.json")
+    monthly_path = os.path.join(DATA_DIR, "member2_monthly_stats.csv")
+    hourly_path = os.path.join(DATA_DIR, "member2_hourly_stats.csv")
+    top_dates_path = os.path.join(DATA_DIR, "member2_top_dates_count.csv")
+    
+    summary = {}
+    if os.path.exists(summary_path):
+        with open(summary_path) as f:
+            summary = json.load(f)
+            
+    monthly = []
+    if os.path.exists(monthly_path):
+        df_m = pd.read_csv(monthly_path)
+        monthly = df_m.to_dict(orient="records")
+        
+    hourly = []
+    if os.path.exists(hourly_path):
+        df_h = pd.read_csv(hourly_path)
+        hourly = df_h.to_dict(orient="records")
+        
+    top_dates = []
+    if os.path.exists(top_dates_path):
+        df_t = pd.read_csv(top_dates_path)
+        top_dates = df_t.to_dict(orient="records")
+
+    nosql_monthly = nosql_store.get_temporal_aggregates("monthly")
+        
+    return jsonify({
+        "status": "success",
+        "role": "Member 2 - Temporal Analysis",
+        "summary": summary,
+        "monthly": monthly,
+        "hourly": hourly,
+        "top_dates": top_dates,
+        "nosql_monthly": nosql_monthly
+    })
+
 @app.route("/api/charts/<path:filename>")
 def get_chart(filename):
     return send_from_directory(CHART_DIR, filename)

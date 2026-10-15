@@ -55,6 +55,17 @@ class FireNoSQLStore:
             cursor.execute("CREATE INDEX IF NOT EXISTS idx_geo ON fire_documents(latitude, longitude)")
             cursor.execute("CREATE INDEX IF NOT EXISTS idx_frp ON fire_documents(frp)")
             cursor.execute("CREATE INDEX IF NOT EXISTS idx_tier ON fire_documents(severity_tier)")
+            cursor.execute("""
+                CREATE TABLE IF NOT EXISTS temporal_aggregates (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    agg_type TEXT,
+                    time_key TEXT UNIQUE,
+                    detection_count INTEGER,
+                    avg_frp REAL,
+                    total_frp REAL
+                )
+            """)
+            cursor.execute("CREATE INDEX IF NOT EXISTS idx_time_key ON temporal_aggregates(time_key)")
             conn.commit()
 
     def insert_documents(self, documents):
@@ -127,6 +138,55 @@ class FireNoSQLStore:
                 "backend": "MongoDB (localhost:27017)" if self.mongo_client is not None else "Embedded NoSQL Document Store"
             }
 
+    def store_temporal_aggregates(self, daily_csv=None, monthly_csv=None):
+        """Persists Member 2 temporal aggregates into NoSQL document store."""
+        daily_csv = daily_csv or "outputs/data/member2_daily_stats.csv"
+        monthly_csv = monthly_csv or "outputs/data/member2_monthly_stats.csv"
+
+        with sqlite3.connect(self.db_path) as conn:
+            cursor = conn.cursor()
+            inserted_count = 0
+
+            # Store monthly aggregates
+            if os.path.exists(monthly_csv):
+                import pandas as pd
+                df_m = pd.read_csv(monthly_csv)
+                for _, row in df_m.iterrows():
+                    cursor.execute("""
+                        INSERT OR REPLACE INTO temporal_aggregates
+                        (agg_type, time_key, detection_count, avg_frp, total_frp)
+                        VALUES (?, ?, ?, ?, ?)
+                    """, ("monthly", str(row.get("year_month", row.get("month"))), int(row["detection_count"]), float(row["avg_frp"]), float(row["total_frp"])))
+                    inserted_count += 1
+
+            # Store top daily aggregates
+            if os.path.exists(daily_csv):
+                import pandas as pd
+                df_d = pd.read_csv(daily_csv)
+                for _, row in df_d.head(30).iterrows():
+                    cursor.execute("""
+                        INSERT OR REPLACE INTO temporal_aggregates
+                        (agg_type, time_key, detection_count, avg_frp, total_frp)
+                        VALUES (?, ?, ?, ?, ?)
+                    """, ("daily", str(row["acq_date"]), int(row["detection_count"]), float(row["avg_frp"]), float(row["total_frp"])))
+                    inserted_count += 1
+
+            conn.commit()
+            print(f"  [NoSQL] Ingested {inserted_count} temporal aggregate records.")
+
+    def get_temporal_aggregates(self, agg_type="monthly"):
+        """Retrieves temporal aggregates from NoSQL document store."""
+        with sqlite3.connect(self.db_path) as conn:
+            cursor = conn.cursor()
+            cursor.execute("""
+                SELECT time_key, detection_count, avg_frp, total_frp
+                FROM temporal_aggregates
+                WHERE agg_type = ?
+                ORDER BY time_key ASC
+            """, (agg_type,))
+            rows = cursor.fetchall()
+            return [{"time_key": r[0], "detection_count": r[1], "avg_frp": r[2], "total_frp": r[3]} for r in rows]
+
 def populate_nosql():
     print("=" * 60)
     print("💾 Initializing NoSQL Backend Document Store")
@@ -141,6 +201,9 @@ def populate_nosql():
         print("  Sample Query (Extreme fires):", len(store.query_severity("Extreme")), "hotspots retrieved.")
     else:
         print("  No sample JSON found, please run PySpark EDA first.")
+
+    # Populate Member 2 temporal aggregates
+    store.store_temporal_aggregates()
 
 if __name__ == "__main__":
     populate_nosql()

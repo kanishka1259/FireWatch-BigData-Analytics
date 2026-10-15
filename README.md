@@ -75,16 +75,23 @@ pip install pyspark pandas numpy matplotlib seaborn scikit-learn flask pymongo p
 # Step 1: Run PySpark Preprocessing and EDA
 python spark_analysis/pyspark_eda.py
 
-# Step 2: Generate Publication-Quality Visualizations
-python spark_analysis/generate_visualizations.py
+# Step 2: Run Member 2 Distributed Temporal Analysis (PySpark / Spark SQL)
+python spark_analysis/member2_temporal_analysis.py
 
-# Step 3: Train Machine Learning Models & Evaluate Performance
+# Step 3: Generate Publication-Quality Visualizations
+python spark_analysis/generate_visualizations.py
+python spark_analysis/generate_member2_visualizations.py
+
+# Step 4: Run Unit Tests for Temporal Parsing & Thresholds
+python -m unittest tests/test_temporal_analysis.py
+
+# Step 5: Train Machine Learning Models & Evaluate Performance (Includes Temporal Holdout)
 python ml_model/train_and_evaluate.py
 
-# Step 4: Populate NoSQL Document Store
+# Step 6: Populate NoSQL Document Store (Hotspots & Temporal Aggregates)
 python nosql/nosql_store.py
 
-# Step 5: Launch Full-Stack Web Dashboard
+# Step 7: Launch Full-Stack Web Dashboard
 python webapp/app.py
 ```
 Open **[http://localhost:5000](http://localhost:5000)** in your browser.
