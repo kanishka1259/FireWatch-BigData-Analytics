@@ -11,15 +11,13 @@ from docx.oxml.ns import nsdecls
 # Paths
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 BDA_ROOT = os.path.abspath(os.path.join(BASE_DIR, ".."))
-SS_DIR = os.path.join(BDA_ROOT, "SS")
+CLEAN_SS_DIR = os.path.join(BASE_DIR, "outputs", "clean_ss")
 CHARTS_DIR = os.path.join(BASE_DIR, "outputs", "charts")
 OUTPUT_DOCX = os.path.join(BASE_DIR, "outputs", "BDA_Review3_Member2_Report.docx")
-OUTPUT_MD = os.path.join(BASE_DIR, "outputs", "REVIEW3_MEMBER2_CONTRIBUTION.md")
-OUTPUT_PASTE_MD = os.path.join(BASE_DIR, "outputs", "GOOGLE_DOC_COPY_PASTE.md")
+ROOT_DOCX = os.path.join(BDA_ROOT, "BDA_Review3_Member2_Report.docx")
 
-print(f"Building Review 3 Report...")
-print(f"Base Dir: {BASE_DIR}")
-print(f"SS Dir: {SS_DIR}")
+print(f"Building Clean Review 3 Report...")
+print(f"Clean SS Dir: {CLEAN_SS_DIR}")
 print(f"Charts Dir: {CHARTS_DIR}")
 
 doc = Document()
@@ -261,11 +259,11 @@ add_callout(doc,
     title="KEY HIGHLIGHTS OF MEMBER 2 DELIVERABLES"
 )
 
-# Embed Screenshot 213350
+# Embed Clean Fig 1
 add_image_with_caption(
     doc,
-    os.path.join(SS_DIR, "Screenshot 2026-10-15 213350.png"),
-    "Figure 1: Scope, Architectural Role, and Distributed PySpark Processing Workflow for Member 2 (Terminal Execution Summary)"
+    os.path.join(CLEAN_SS_DIR, "fig1_scope_pyspark.png"),
+    "Figure 1: Scope, Architectural Role, and Distributed PySpark Processing Workflow for Member 2"
 )
 
 # -------------------------------------------------------------
@@ -304,17 +302,17 @@ bench_tbl = doc.add_table(rows=1, cols=5)
 style_table(bench_tbl, [2.2, 1.8, 1.1, 0.9, 1.2], bench_headers, bench_data, align_cols=['L', 'L', 'R', 'R', 'R'])
 doc.add_paragraph().paragraph_format.space_after = Pt(6)
 
-# Embed Screenshot 155228 and Screenshot 213423
+# Embed Clean Fig 2 and Clean Fig 3
 add_image_with_caption(
     doc,
-    os.path.join(SS_DIR, "Screenshot 2026-10-15 155228.png"),
+    os.path.join(CLEAN_SS_DIR, "fig2_runtime_benchmark.png"),
     "Figure 2: Empirical PySpark Distributed Execution Runtime Table and Verification Logs (Recorded live on multi-core workstation)"
 )
 
 add_image_with_caption(
     doc,
-    os.path.join(SS_DIR, "Screenshot 2026-10-15 213423.png"),
-    "Figure 3: Distributed PySpark SQL GroupBy and Window Code Snippet for UTC Hourly Extraction and 7-Day Rolling Aggregation"
+    os.path.join(CLEAN_SS_DIR, "fig3_pyspark_code.png"),
+    "Figure 3: Distributed PySpark SQL GroupBy Code Snippet for UTC Hourly Extraction and Aggregation"
 )
 
 # -------------------------------------------------------------
@@ -346,10 +344,10 @@ top_tbl = doc.add_table(rows=1, cols=6)
 style_table(top_tbl, [0.6, 1.2, 1.1, 1.1, 1.3, 1.9], top_dates_headers, top_dates_data, align_cols=['C', 'C', 'R', 'R', 'R', 'L'])
 doc.add_paragraph().paragraph_format.space_after = Pt(6)
 
-# Embed Screenshot 154856 & 154902 & member2_daily_trend.png
+# Embed Clean Fig 4 and Publication Chart
 add_image_with_caption(
     doc,
-    os.path.join(SS_DIR, "Screenshot 2026-10-15 154902.png"),
+    os.path.join(CLEAN_SS_DIR, "fig4_peak_dates.png"),
     "Figure 4: PySpark Terminal Output — Top 10 Peak Hotspot Dates Ranked by Frequency with Thermal Power and Drivers"
 )
 
@@ -372,7 +370,7 @@ add_p(doc, "Member 2 conducted an exhaustive calendar sequence audit across the 
 
 add_image_with_caption(
     doc,
-    os.path.join(SS_DIR, "Screenshot 2026-10-15 154937.png"),
+    os.path.join(CLEAN_SS_DIR, "fig6_monthly_gap.png"),
     "Figure 6: PySpark Terminal Output — Monthly Seasonal Volume, Radiative Power Divergence, and 39-Day Gap Discovery"
 )
 
@@ -400,7 +398,7 @@ add_callout(doc,
 
 add_image_with_caption(
     doc,
-    os.path.join(SS_DIR, "Screenshot 2026-10-15 155012.png"),
+    os.path.join(CLEAN_SS_DIR, "fig8_diurnal_cycle.png"),
     "Figure 8: PySpark Terminal Output — Diurnal UTC Acquisition Cycle Breakdown and Orbital Explanation"
 )
 
@@ -424,7 +422,7 @@ add_callout(doc,
 
 add_image_with_caption(
     doc,
-    os.path.join(SS_DIR, "Screenshot 2026-10-15 155025.png"),
+    os.path.join(CLEAN_SS_DIR, "fig10_day_night.png"),
     "Figure 10: PySpark Terminal Output — Day vs. Night Ratio and WARD Nocturnal Triage Rule Formulation"
 )
 
@@ -481,13 +479,13 @@ add_callout(doc,
 
 add_image_with_caption(
     doc,
-    os.path.join(SS_DIR, "Screenshot 2026-10-15 155043.png"),
+    os.path.join(CLEAN_SS_DIR, "fig13_ml_benchmark.png"),
     "Figure 13: PySpark & Scikit-Learn Terminal Benchmark — Machine Learning Performance Table and Forward-Chronological Holdout Split"
 )
 
 add_image_with_caption(
     doc,
-    os.path.join(SS_DIR, "Screenshot 2026-10-15 160612.png"),
+    os.path.join(CLEAN_SS_DIR, "fig14_ml_holdout_log.png"),
     "Figure 14: Terminal Execution Logs of train_and_evaluate.py Demonstrating Temporal Validation and Latency Benchmarks"
 )
 
@@ -529,7 +527,7 @@ doc.add_paragraph().paragraph_format.space_after = Pt(6)
 
 add_image_with_caption(
     doc,
-    os.path.join(SS_DIR, "Screenshot 2026-10-15 213408.png"),
+    os.path.join(CLEAN_SS_DIR, "fig17_code_architecture_table.png"),
     "Figure 17: Repository Source Code Architecture, Toolchain Stack, and Component Ownership Mapping"
 )
 
@@ -552,7 +550,7 @@ add_callout(doc,
 
 add_image_with_caption(
     doc,
-    os.path.join(SS_DIR, "Screenshot 2026-10-15 163324.png"),
+    os.path.join(CLEAN_SS_DIR, "fig18_viva_pitch.png"),
     "Figure 18: Live Presentation Script for Examiner Defense (Spoken Summary of Member 2 Technical Contributions)"
 )
 
@@ -570,14 +568,14 @@ add_p(doc, "Yes. Our calendar continuity sequence audit discovered exactly 39 mi
 
 add_image_with_caption(
     doc,
-    os.path.join(SS_DIR, "Screenshot 2026-10-15 213436.png"),
-    "Figure 19: Examiner Viva Cheat-Sheet (Part 1: PySpark Architecture, Diurnal Cycle, and Nocturnal Crown Fires)"
+    os.path.join(CLEAN_SS_DIR, "fig19_leakage_code.png"),
+    "Figure 19: Machine Learning Temporal Leakage Prevention Code Walkthrough"
 )
 
 add_image_with_caption(
     doc,
-    os.path.join(SS_DIR, "Screenshot 2026-10-15 213450.png"),
-    "Figure 20: Examiner Viva Cheat-Sheet (Part 2: Seasonal Concept Drift and Archival Data Gap Discoveries)"
+    os.path.join(CLEAN_SS_DIR, "fig20_viva_cheat_sheet.png"),
+    "Figure 20: Complete Examiner Viva Cheat-Sheet (Questions 1 through 5 with Model Answers)"
 )
 
 # -------------------------------------------------------------
@@ -585,6 +583,15 @@ add_image_with_caption(
 # -------------------------------------------------------------
 os.makedirs(os.path.dirname(OUTPUT_DOCX), exist_ok=True)
 doc.save(OUTPUT_DOCX)
-print(f"Document successfully created at: {OUTPUT_DOCX}")
+print(f"Clean Document successfully created at: {OUTPUT_DOCX}")
 
-print("Review 3 report generation complete!")
+clean_root_docx = os.path.join(BDA_ROOT, "BDA_Review3_Member2_Report_CLEAN.docx")
+doc.save(clean_root_docx)
+print(f"Clean Root Document created at: {clean_root_docx}")
+
+try:
+    doc.save(ROOT_DOCX)
+    print(f"Overwrote root docx at: {ROOT_DOCX}")
+except Exception as e:
+    print(f"Note: {ROOT_DOCX} is currently open in Word. Created clean copy as {clean_root_docx}")
+

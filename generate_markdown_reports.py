@@ -13,7 +13,7 @@ content = """# 🛰️ FireWatch: NASA FIRMS Global Telemetry & Wildfire Dispatc
 **Execution Engine:** Apache PySpark 4.2.0 (Spark SQL & Distributed DataFrame API) / Java 21 LTS / Python 3.13  
 **Dataset Ingested:** NASA FIRMS Global Hotspot Telemetry (`fire_archive_SV-C2_817450.csv`, **9,511,402 records**, ~730.16 MB)  
 **Repository:** [kanishka1259/FireWatch-BigData-Analytics](https://github.com/kanishka1259/FireWatch-BigData-Analytics)  
-**Word Document with Embedded Images:** `outputs/BDA_Review3_Member2_Report.docx`
+**Clean Word Document with Embedded Images:** `outputs/BDA_Review3_Member2_Report.docx`
 
 ---
 
@@ -31,8 +31,8 @@ Within the FireWatch big data architecture, Member 2 was specifically tasked wit
 4. **Leakage-Safe Machine Learning Validation**: Overcame temporal data leakage by engineering a **Forward-Chronological Holdout Split** (71.19% temporal accuracy vs. 74.72% random split, 0.8415 ROC-AUC), empirically proving seasonal concept drift.
 5. **Full-Stack Operationalization**: Integrated temporal REST APIs (`/api/temporal`), live Chart.js visualizations, NoSQL document persistence, and automated test suite.
 
-![Figure 1: Scope, Architectural Role, and Distributed PySpark Processing Workflow for Member 2](../../SS/Screenshot%202026-10-15%20213350.png)
-*Figure 1: Scope, Architectural Role, and Distributed PySpark Processing Workflow for Member 2 (Terminal Execution Summary)*
+![Figure 1: Scope, Architectural Role, and Distributed PySpark Processing Workflow for Member 2](clean_ss/fig1_scope_pyspark.png)
+*Figure 1: Scope, Architectural Role, and Distributed PySpark Processing Workflow for Member 2*
 
 ---
 
@@ -59,11 +59,11 @@ PySpark's **Catalyst Query Optimizer** converts high-level DataFrame transformat
 | ML Model Training & Temporal Holdout | Scikit-Learn Multi-Threaded | 200,000 | 10.39 s | 19,250 samples/s |
 | NoSQL Storage Persistence | SQLite Document Store | 5,000 + 38 | 0.12 s | 42,000 docs/s |
 
-![Figure 2: Empirical PySpark Distributed Execution Runtime Table and Verification Logs](../../SS/Screenshot%202026-10-15%20155228.png)
+![Figure 2: Empirical PySpark Distributed Execution Runtime Table and Verification Logs](clean_ss/fig2_runtime_benchmark.png)
 *Figure 2: Empirical PySpark Distributed Execution Runtime Table and Verification Logs (Recorded live on multi-core workstation)*
 
-![Figure 3: Distributed PySpark SQL GroupBy and Window Code Snippet for UTC Hourly Extraction](../../SS/Screenshot%202026-10-15%20213423.png)
-*Figure 3: Distributed PySpark SQL GroupBy and Window Code Snippet for UTC Hourly Extraction and 7-Day Rolling Aggregation*
+![Figure 3: Distributed PySpark SQL GroupBy Code Snippet for UTC Hourly Extraction](clean_ss/fig3_pyspark_code.png)
+*Figure 3: Distributed PySpark SQL GroupBy Code Snippet for UTC Hourly Extraction and Aggregation*
 
 ---
 
@@ -85,7 +85,7 @@ Across the 9.51 million observations, the single busiest day in recorded satelli
 | **9** | **2026-03-28** | **60,267** | **8.38 MW** | **505,037 MW** | Indochina dry season biomass burning |
 | **10** | **2026-01-25** | **59,145** | **7.91 MW** | **467,837 MW** | Southern Hemisphere peak |
 
-![Figure 4: PySpark Terminal Output — Top 10 Peak Hotspot Dates Ranked by Frequency with Thermal Power and Drivers](../../SS/Screenshot%202026-10-15%20154902.png)
+![Figure 4: PySpark Terminal Output — Top 10 Peak Hotspot Dates Ranked by Frequency with Thermal Power and Drivers](clean_ss/fig4_peak_dates.png)
 *Figure 4: PySpark Terminal Output — Top 10 Peak Hotspot Dates Ranked by Frequency with Thermal Power and Regional Drivers*
 
 ![Figure 5: 300-DPI Publication Chart — Global Daily Hotspot Detection Volume, 7-Day Rolling Window, and Cumulative FRP](charts/member2_daily_trend.png)
@@ -100,7 +100,7 @@ Aggregating by Year-Month rather than calendar month resolves the true seasonal 
 - **Quietest Complete Month:** **December 2025** recorded the lowest volume among complete months (1,079,467 hotspots, 11.35%).
 - **Data Continuity Audit (Sensor Gap Discovery):** Member 2 conducted an exhaustive calendar sequence audit across the expected 262-day operational span. The audit revealed exactly **39 missing calendar days**, most notably a total sensor archive cutoff across the **entire month of May 2026 (0 records from 2026-05-01 to 2026-05-31)**. This empirical finding prevents false inferences of zero wildfire activity during late spring.
 
-![Figure 6: PySpark Terminal Output — Monthly Seasonal Volume, Radiative Power Divergence, and 39-Day Gap Discovery](../../SS/Screenshot%202026-10-15%20154937.png)
+![Figure 6: PySpark Terminal Output — Monthly Seasonal Volume, Radiative Power Divergence, and 39-Day Gap Discovery](clean_ss/fig6_monthly_gap.png)
 *Figure 6: PySpark Terminal Output — Monthly Seasonal Volume, Radiative Power Divergence, and 39-Day Gap Discovery*
 
 ![Figure 7: 300-DPI Publication Chart — Year-Month Fire Hotspot Counts and Dual-Axis Mean Fire Radiative Power](charts/member2_monthly_trend.png)
@@ -117,7 +117,7 @@ Member 2 parsed satellite acquisition timestamps (`acq_time` formatted as UTC HH
 
 > **Physical Satellite Limitation & Orbital Dynamics:** Because the Suomi-NPP VIIRS satellite orbits in a sun-synchronous sun-tracking trajectory (local solar crossing time ~13:30 descending), UTC hours represent satellite overpass geometry across specific terrestrial longitudes. Hour 11:00–12:00 UTC corresponds to local afternoon convective solar heating across sub-Saharan Africa, the Mediterranean basin, and Eastern Europe, where peak surface temperatures and lowest relative humidity ignite explosive wildfire spread.
 
-![Figure 8: PySpark Terminal Output — Diurnal UTC Acquisition Cycle Breakdown and Orbital Explanation](../../SS/Screenshot%202026-10-15%20155012.png)
+![Figure 8: PySpark Terminal Output — Diurnal UTC Acquisition Cycle Breakdown and Orbital Explanation](clean_ss/fig8_diurnal_cycle.png)
 *Figure 8: PySpark Terminal Output — Diurnal UTC Acquisition Cycle Breakdown and Orbital Explanation*
 
 ![Figure 9: 300-DPI Publication Chart — Global 24-Hour UTC Diurnal Hotspot Distribution with Satellite Sun-Synchronous Windows](charts/member2_hourly_distribution.png)
@@ -131,7 +131,7 @@ Member 2 parsed satellite acquisition timestamps (`acq_time` formatted as UTC HH
 
 > **Operational Intelligence Protocol (WARD Dispatch Rule):** Under standard atmospheric conditions, nocturnal relative humidity recovery and surface cooling dampens wildfire combustion. Consequently, any nocturnal detection exhibiting an $\\text{FRP} \\ge 30\\text{ MW}$ represents an uncontrollable crown fire that has breached atmospheric temperature inversions. Member 2 formulated this empirical threshold into the WARD Decision Engine, requiring immediate **Level-1 emergency aerial and night-vision water bomber escalation**.
 
-![Figure 10: PySpark Terminal Output — Day vs. Night Ratio and WARD Nocturnal Triage Rule Formulation](../../SS/Screenshot%202026-10-15%20155025.png)
+![Figure 10: PySpark Terminal Output — Day vs. Night Ratio and WARD Nocturnal Triage Rule Formulation](clean_ss/fig10_day_night.png)
 *Figure 10: PySpark Terminal Output — Day vs. Night Ratio and WARD Nocturnal Triage Rule Formulation*
 
 ![Figure 11: 300-DPI Publication Chart — Day vs. Night Proportion Ratio and Mean Fire Radiative Power Contrast](charts/member2_day_vs_night.png)
@@ -166,10 +166,10 @@ To resolve this flaw, Member 2 engineered a **Forward-Chronological Holdout Spli
 
 > **Data Science Finding (Seasonal Concept Drift Proven):** Evaluating the model strictly on subsequent chronological dates results in a modest 3.53% drop in accuracy (from 74.72% to 71.19%), while maintaining strong discriminative ability (ROC-AUC of 0.8415). This drop proves that seasonal domain shift occurs in wildfire telemetry as vegetation dryness and regional climate shift across seasons. This provides rigorous empirical evidence that production wildfire AI models must incorporate seasonal retraining cycles.
 
-![Figure 13: PySpark & Scikit-Learn Terminal Benchmark — Machine Learning Performance Table and Forward-Chronological Holdout Split](../../SS/Screenshot%202026-10-15%20155043.png)
+![Figure 13: PySpark & Scikit-Learn Terminal Benchmark — Machine Learning Performance Table and Forward-Chronological Holdout Split](clean_ss/fig13_ml_benchmark.png)
 *Figure 13: PySpark & Scikit-Learn Terminal Benchmark — Machine Learning Performance Table and Forward-Chronological Holdout Split*
 
-![Figure 14: Terminal Execution Logs of train_and_evaluate.py Demonstrating Temporal Validation and Latency Benchmarks](../../SS/Screenshot%202026-10-15%20160612.png)
+![Figure 14: Terminal Execution Logs of train_and_evaluate.py Demonstrating Temporal Validation](clean_ss/fig14_ml_holdout_log.png)
 *Figure 14: Terminal Execution Logs of train_and_evaluate.py Demonstrating Temporal Validation and Latency Benchmarks*
 
 ![Figure 15: 4-Tier Fire Severity Confusion Matrix Across Low, Moderate, High, and Extreme Tiers](charts/ml_confusion_matrix.png)
@@ -194,7 +194,7 @@ Member 2's data science and PySpark deliverables are seamlessly operationalized 
 | **Interactive UI & Globe** | `webapp/templates/index.html` | HTML5, CSS3, Chart.js, Leaflet.js | Dynamic metric cards, satellite telemetry globe, modal lightbox |
 | **NoSQL Document Store** | `nosql/nosql_store.py` | SQLite Document Database | Table: `temporal_aggregates` with daily and monthly records |
 
-![Figure 17: Repository Source Code Architecture, Toolchain Stack, and Component Ownership Mapping](../../SS/Screenshot%202026-10-15%20213408.png)
+![Figure 17: Repository Source Code Architecture, Toolchain Stack, and Component Ownership Mapping](clean_ss/fig17_code_architecture_table.png)
 *Figure 17: Repository Source Code Architecture, Toolchain Stack, and Component Ownership Mapping*
 
 ---
@@ -214,7 +214,7 @@ Member 2's data science and PySpark deliverables are seamlessly operationalized 
 >  
 > *Furthermore, I evaluated our machine learning models using a forward-chronological holdout split to prevent temporal data leakage, proving that accuracy shifts realistically from 74.72% to 71.19% due to seasonal concept drift while maintaining an 0.8415 ROC-AUC. All my findings are verified with 10 automated unit tests, visualized in 5 high-resolution charts, and served live through our interactive web application."*
 
-![Figure 18: Live Presentation Script for Examiner Defense (Spoken Summary of Member 2 Technical Contributions)](../../SS/Screenshot%202026-10-15%20163324.png)
+![Figure 18: Live Presentation Script for Examiner Defense](clean_ss/fig18_viva_pitch.png)
 *Figure 18: Live Presentation Script for Examiner Defense (Spoken Summary of Member 2 Technical Contributions)*
 
 ### Top 5 Examiner Questions & Precise Answers
@@ -234,11 +234,11 @@ Member 2's data science and PySpark deliverables are seamlessly operationalized 
 **Q5: Did you identify any data quality or sensor continuity issues?**  
 **Answer:** Yes. Our calendar continuity sequence audit discovered exactly 39 missing calendar days between October 2025 and June 2026, most notably a complete 31-day archival gap for the entire month of May 2026. This was crucial because it prevented our models and dispatchers from assuming zero wildfire danger during late spring.
 
-![Figure 19: Examiner Viva Cheat-Sheet (Part 1: PySpark Architecture, Diurnal Cycle, and Nocturnal Crown Fires)](../../SS/Screenshot%202026-10-15%20213436.png)
-*Figure 19: Examiner Viva Cheat-Sheet (Part 1: PySpark Architecture, Diurnal Cycle, and Nocturnal Crown Fires)*
+![Figure 19: Machine Learning Temporal Leakage Prevention Code Walkthrough](clean_ss/fig19_leakage_code.png)
+*Figure 19: Machine Learning Temporal Leakage Prevention Code Walkthrough*
 
-![Figure 20: Examiner Viva Cheat-Sheet (Part 2: Seasonal Concept Drift and Archival Data Gap Discoveries)](../../SS/Screenshot%202026-10-15%20213450.png)
-*Figure 20: Examiner Viva Cheat-Sheet (Part 2: Seasonal Concept Drift and Archival Data Gap Discoveries)*
+![Figure 20: Complete Examiner Viva Cheat-Sheet](clean_ss/fig20_viva_cheat_sheet.png)
+*Figure 20: Complete Examiner Viva Cheat-Sheet (Questions 1 through 5 with Model Answers)*
 
 ---
 """
@@ -249,4 +249,4 @@ with open(OUTPUT_MD, "w", encoding="utf-8") as f:
 with open(OUTPUT_PASTE, "w", encoding="utf-8") as f:
     f.write(content)
 
-print(f"Created Markdown files:\n1. {OUTPUT_MD}\n2. {OUTPUT_PASTE}")
+print(f"Created Markdown files with clean screenshots:\n1. {OUTPUT_MD}\n2. {OUTPUT_PASTE}")

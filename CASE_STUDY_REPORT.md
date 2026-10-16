@@ -124,7 +124,7 @@ Two predictive models were implemented and benchmarked:
 | **Web Application** | `webapp/app.py` & `webapp/templates/index.html` | Full-stack interactive dashboard with live temporal metrics & Chart.js |
 | **Member 2 Report** | `outputs/MEMBER2_TEMPORAL_ANALYSIS_REPORT.md` | Comprehensive empirical report resolving all temporal research questions |
 | **Review 3 Final Report** | `outputs/REVIEW3_MEMBER2_CONTRIBUTION.md` | Complete Review 3 submission report for Member 2 |
-| **Word Submission Doc** | `outputs/BDA_Review3_Member2_Report.docx` | 3.5 MB Microsoft Word submission document with 20 embedded screenshots |
+| **Word Submission Doc** | `outputs/BDA_Review3_Member2_Report.docx` | 2.68 MB Microsoft Word submission document with 20 clean embedded screenshots |
 
 ---
 
@@ -133,10 +133,10 @@ Two predictive models were implemented and benchmarked:
 ### 7.1 Research Scope & Distributed PySpark Architecture
 Member 2 resolved the temporal dimension of global wildfire activity across **9,511,402 records** captured between October 12, 2025 and June 30, 2026. The processing was executed in **31.75 seconds** (~299,500 records/sec throughput) using Apache PySpark 4.2.0 on Java 21 LTS.
 
-![Figure 1: Scope, Architectural Role, and Distributed PySpark Processing Workflow](../SS/Screenshot%202026-10-15%20213350.png)
+![Figure 1: Scope, Architectural Role, and Distributed PySpark Processing Workflow](outputs/clean_ss/fig1_scope_pyspark.png)
 *Figure 1: Scope, Architectural Role, and Distributed PySpark Processing Workflow for Member 2*
 
-![Figure 2: Empirical PySpark Distributed Execution Runtime Table](../SS/Screenshot%202026-10-15%20155228.png)
+![Figure 2: Empirical PySpark Distributed Execution Runtime Table](outputs/clean_ss/fig2_runtime_benchmark.png)
 *Figure 2: Empirical PySpark Distributed Execution Runtime Table and Verification Logs*
 
 ### 7.2 Peak Observed Dates & Seasonal Seasonality
@@ -145,10 +145,10 @@ Member 2 resolved the temporal dimension of global wildfire activity across **9,
 * **Peak Thermal Destructiveness:** **June 2026** (10.32 MW mean FRP, 12,356,080 MW total energy) driven by high-latitude boreal crown combustion.
 * **Archival Gap Discovery:** Identified a 39-calendar-day archival sensor gap, specifically the entire month of May 2026 (0 records).
 
-![Figure 3: PySpark Terminal Output — Top 10 Peak Hotspot Dates Ranked by Frequency](../SS/Screenshot%202026-10-15%20154902.png)
+![Figure 3: PySpark Terminal Output — Top 10 Peak Hotspot Dates Ranked by Frequency](outputs/clean_ss/fig4_peak_dates.png)
 *Figure 3: PySpark Terminal Output — Top 10 Peak Hotspot Dates Ranked by Frequency with Thermal Power and Drivers*
 
-![Figure 4: PySpark Terminal Output — Monthly Seasonal Volume and 39-Day Gap Discovery](../SS/Screenshot%202026-10-15%20154937.png)
+![Figure 4: PySpark Terminal Output — Monthly Seasonal Volume and 39-Day Gap Discovery](outputs/clean_ss/fig6_monthly_gap.png)
 *Figure 4: PySpark Terminal Output — Monthly Seasonal Volume, Radiative Power Divergence, and 39-Day Gap Discovery*
 
 ### 7.3 Diurnal Convective Cycle & Nocturnal Dispatch Protocol
@@ -156,10 +156,10 @@ Member 2 resolved the temporal dimension of global wildfire activity across **9,
 * **Diurnal Split:** 76.19% Daytime vs. 23.81% Nighttime.
 * **WARD Nocturnal Decision Protocol:** Nighttime fires exhibiting $\text{FRP} \ge 30\text{ MW}$ represent extreme crown fires that have overcome nighttime atmospheric temperature inversions, triggering immediate Level-1 emergency aerial escalation.
 
-![Figure 5: PySpark Terminal Output — Diurnal UTC Acquisition Cycle Breakdown](../SS/Screenshot%202026-10-15%20155012.png)
+![Figure 5: PySpark Terminal Output — Diurnal UTC Acquisition Cycle Breakdown](outputs/clean_ss/fig8_diurnal_cycle.png)
 *Figure 5: PySpark Terminal Output — Diurnal UTC Acquisition Cycle Breakdown and Orbital Explanation*
 
-![Figure 6: PySpark Terminal Output — Day vs. Night Ratio and WARD Nocturnal Triage Rule Formulation](../SS/Screenshot%202026-10-15%20155025.png)
+![Figure 6: PySpark Terminal Output — Day vs. Night Ratio and WARD Nocturnal Triage Rule Formulation](outputs/clean_ss/fig10_day_night.png)
 *Figure 6: PySpark Terminal Output — Day vs. Night Ratio and WARD Nocturnal Triage Rule Formulation*
 
 ### 7.4 Machine Learning Forward-Chronological Holdout Split (Concept Drift)
@@ -168,14 +168,15 @@ To prevent temporal data leakage inherent in random 80/20 train/test splits, Mem
 * **Forward Chronological Split:** 71.19% Accuracy, 0.6868 F1-score, 0.8415 ROC-AUC, 0.002 ms latency.
 * **Data Science Insight:** The ~3.5% drop proves **seasonal concept drift** due to changes in vegetation fuel moisture across seasons, proving that real-world wildfire models must undergo periodic seasonal recalibration.
 
-![Figure 7: PySpark & Scikit-Learn Terminal Benchmark — Machine Learning Performance Table](../SS/Screenshot%202026-10-15%20155043.png)
+![Figure 7: PySpark & Scikit-Learn Terminal Benchmark — Machine Learning Performance Table](outputs/clean_ss/fig13_ml_benchmark.png)
 *Figure 7: PySpark & Scikit-Learn Terminal Benchmark — Machine Learning Performance Table and Forward-Chronological Holdout Split*
 
-![Figure 8: Terminal Execution Logs of train_and_evaluate.py](../SS/Screenshot%202026-10-15%20160612.png)
+![Figure 8: Terminal Execution Logs of train_and_evaluate.py](outputs/clean_ss/fig14_ml_holdout_log.png)
 *Figure 8: Terminal Execution Logs of train_and_evaluate.py Demonstrating Temporal Validation and Latency Benchmarks*
 
 ### 7.5 Oral Viva Defense Reference
-![Figure 9: Live Presentation Script for Examiner Defense](../SS/Screenshot%202026-10-15%20163324.png)
+![Figure 9: Live Presentation Script for Examiner Defense](outputs/clean_ss/fig18_viva_pitch.png)
 *Figure 9: Live Presentation Script for Examiner Defense (Spoken Summary of Member 2 Technical Contributions)*
+
 
 
