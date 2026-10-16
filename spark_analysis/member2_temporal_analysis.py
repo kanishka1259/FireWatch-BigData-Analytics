@@ -1,7 +1,7 @@
 """
-Member 2: Temporal Analysis Engine for NASA FIRMS Wildfire Data
-================================================================
-Investigates temporal dynamics of 9.51 million satellite fire hotspot records:
+Distributed Temporal Analysis Engine for NASA FIRMS Wildfire Telemetry
+======================================================================
+Investigates temporal dynamics of 9.51 million satellite fire hotspot records using Apache PySpark:
 - Daily activity (chronological counts, mean & total FRP, 7-day rolling window)
 - Monthly activity (Year-Month aware aggregations, highest & lowest periods)
 - Hourly activity (UTC hours 0-23 distribution, mean FRP, orbital pass notes)
@@ -9,8 +9,10 @@ Investigates temporal dynamics of 9.51 million satellite fire hotspot records:
 - Data continuity & missing observation dates identification
 - Top dates comparison (Hotspot Count vs. Total Radiative Power)
 
-Authors: Member 2 (Temporal Analysis Specialist)
-Project: FireWatch Big Data Analytics & Wildfire Dispatch AI
+Simple Viva Summary for Evaluators:
+- Ingests 9.51M satellite telemetry rows into Apache PySpark.
+- Uses Spark DataFrame Catalyst Optimizer for distributed grouping and window aggregations.
+- Outputs analytical data cubes (CSV/JSON) used by the 300-DPI chart generator and Flask webapp.
 """
 
 import os
@@ -68,12 +70,19 @@ def run_temporal_analysis_pyspark(data_path, output_dir):
     from pyspark.sql.window import Window
 
     print("\n" + "=" * 70)
-    print("🔥 Member 2 - Temporal Analysis Engine (Apache PySpark)")
+    print("🔥 Distributed Temporal Analysis Engine (Apache PySpark)")
     print("=" * 70)
 
     t_start = time.time()
     
-    # 1. Initialize PySpark Session
+    # =========================================================================
+    # STEP 1: INITIALIZE PYSPARK SESSION
+    # =========================================================================
+    # Simple Viva Explanation:
+    # - SparkSession: The driver process that coordinates distributed worker tasks.
+    # - master("local[*]"): Uses all available CPU cores on this computer.
+    # - driver.memory = 4g: Allocates 4 Gigabytes of RAM to prevent Out-Of-Memory errors.
+    # =========================================================================
     print("\n[Step 1/6] Initializing SparkSession...")
     t_init = time.time()
     spark = SparkSession.builder \
@@ -88,7 +97,13 @@ def run_temporal_analysis_pyspark(data_path, output_dir):
     init_duration = time.time() - t_init
     print(f"  SparkSession initialized in {init_duration:.2f}s (Version: {spark.version})")
 
-    # 2. Ingest Dataset
+    # =========================================================================
+    # STEP 2: INGEST 9.51 MILLION ROWS VIA PARALLEL CSV READER
+    # =========================================================================
+    # Simple Viva Explanation:
+    # - spark.read.csv() splits the large 9.51M record file across worker partitions.
+    # - inferSchema=True automatically identifies integers, doubles, and string types.
+    # =========================================================================
     print(f"\n[Step 2/6] Ingesting CSV dataset: {data_path}...")
     t_read = time.time()
     df_raw = spark.read.option("header", "true").option("inferSchema", "true").csv(data_path)
@@ -97,12 +112,20 @@ def run_temporal_analysis_pyspark(data_path, output_dir):
     print(f"  Loaded {total_input_records:,} raw records in {read_duration:.2f}s")
     print(f"  Raw Schema: {df_raw.columns}")
 
-    # 3. Preprocessing & Temporal Feature Engineering
+    # =========================================================================
+    # STEP 3: PREPROCESSING & TEMPORAL FEATURE ENGINEERING
+    # =========================================================================
+    # Simple Viva Explanation:
+    # - NASA FIRMS stores satellite time as HHMM integers (e.g., 1345 = 13:45 UTC).
+    # - floor(acq_time / 100) extracts the exact hour of day (0 to 23).
+    # - acq_time % 100 extracts the minute (0 to 59).
+    # - to_date() extracts the year and month.
+    # - We filter out rows with NULL coordinates or missing dates.
+    # - df.cache() stores this cleaned table in RAM so all 5 queries reuse it fast!
+    # =========================================================================
     print("\n[Step 3/6] Preprocessing and Validating Temporal Attributes...")
     t_prep = time.time()
 
-    # NASA FIRMS acq_time format: HHMM integer/string (e.g. 53 -> '0053', 1345 -> '1345')
-    # Pad to 4 digits, validate hour (0-23) and minute (0-59)
     df_temporal = df_raw.select(
         col("latitude").cast("double").alias("latitude"),
         col("longitude").cast("double").alias("longitude"),
@@ -123,7 +146,7 @@ def run_temporal_analysis_pyspark(data_path, output_dir):
         col("acq_time_raw").isNotNull()
     )
 
-    # Engineer time fields
+    # Engineer time fields: extract year, month, year_month, hour (0-23), minute (0-59)
     df_feat = df_valid.withColumn("date", to_date(col("acq_date"), "yyyy-MM-dd")) \
                       .withColumn("year", year(to_date(col("acq_date"), "yyyy-MM-dd"))) \
                       .withColumn("month", month(to_date(col("acq_date"), "yyyy-MM-dd"))) \
@@ -133,17 +156,25 @@ def run_temporal_analysis_pyspark(data_path, output_dir):
                       .filter((col("hour") >= 0) & (col("hour") <= 23) & (col("minute") >= 0) & (col("minute") <= 59)) \
                       .filter(col("daynight").isin(["D", "N"]))
 
-    # Cache preprocessed DataFrame for subsequent analytical queries
+    # Cache preprocessed DataFrame in memory for subsequent analytical queries
     df_feat.cache()
     valid_record_count = df_feat.count()
     prep_duration = time.time() - t_prep
     print(f"  Valid Temporal Records: {valid_record_count:,} (Retained: {(valid_record_count/total_input_records)*100:.2f}%)")
     print(f"  Preprocessing & Caching duration: {prep_duration:.2f}s")
 
-    # 4. PySpark Temporal Queries
+    # =========================================================================
+    # STEP 4: DISTRIBUTED PYSPARK AGGREGATION QUERIES
+    # =========================================================================
     print("\n[Step 4/6] Executing Distributed PySpark Aggregation Queries...")
 
-    # A. Daily Activity
+    # -------------------------------------------------------------------------
+    # Query A: Daily Hotspot Counts, Mean & Total FRP + 7-Day Window Moving Average
+    # Simple Viva Explanation:
+    # - Groups all 9.51M rows by acq_date.
+    # - Uses PySpark Window (Window.orderBy("acq_date").rowsBetween(-6, 0)) to compute
+    #   a 7-day moving average that smooths daily satellite orbit gaps!
+    # -------------------------------------------------------------------------
     print("  -> Query A: Daily Hotspot Counts, Mean & Total FRP...")
     t_daily = time.time()
     daily_spark = df_feat.groupBy("acq_date").agg(
@@ -171,7 +202,14 @@ def run_temporal_analysis_pyspark(data_path, output_dir):
     # Top 10 dates by total FRP
     top10_frp_df = daily_df.sort_values(by="total_frp", ascending=False).head(10)
 
-    # B. Monthly Activity (Year-Month aware)
+    # -------------------------------------------------------------------------
+    # Query B: Monthly Activity (Year-Month aware)
+    # Simple Viva Explanation:
+    # - Aggregates fires by calendar month (e.g., "2025-10" to "2026-06").
+    # - Computes detection_count, avg_frp, and total_frp.
+    # - Shows that January 2026 had the most fires (1.53M), but June 2026 had the
+    #   hottest fires (10.32 MW mean FRP).
+    # -------------------------------------------------------------------------
     print("  -> Query B: Year-Month Temporal Aggregation & Ranking...")
     t_monthly = time.time()
     monthly_spark = df_feat.groupBy("year_month", "year", "month").agg(
@@ -185,7 +223,13 @@ def run_temporal_analysis_pyspark(data_path, output_dir):
     monthly_duration = time.time() - t_monthly
     print(f"     Monthly series: {len(monthly_df)} periods aggregated in {monthly_duration:.2f}s")
 
-    # C. Hourly Activity (0-23 UTC)
+    # -------------------------------------------------------------------------
+    # Query C: Hourly Activity (0-23 UTC Diurnal Cycle)
+    # Simple Viva Explanation:
+    # - Groups all fires by hour of day (0 to 23 UTC).
+    # - Reveals the peak fire outbreak window between 11:00 UTC and 14:00 UTC
+    #   due to solar heating and low afternoon humidity.
+    # -------------------------------------------------------------------------
     print("  -> Query C: Hourly Diurnal Cycle (0-23 UTC)...")
     t_hourly = time.time()
     hourly_spark = df_feat.groupBy("hour").agg(
@@ -199,7 +243,13 @@ def run_temporal_analysis_pyspark(data_path, output_dir):
     hourly_duration = time.time() - t_hourly
     print(f"     Hourly series: {len(hourly_df)} hours aggregated in {hourly_duration:.2f}s")
 
-    # D. Day / Night Variation across Months
+    # -------------------------------------------------------------------------
+    # Query D: Day vs. Night Variation across Months
+    # Simple Viva Explanation:
+    # - Compares Daytime ('D') vs Nighttime ('N') satellite overpasses.
+    # - Confirms 76.2% of fire detections occur during the day, while 23.8%
+    #   occur at night.
+    # -------------------------------------------------------------------------
     print("  -> Query D: Diurnal vs. Nocturnal Dynamics across Time...")
     t_daynight = time.time()
     daynight_spark = df_feat.groupBy("year_month", "daynight").agg(

@@ -47,15 +47,30 @@ if os.path.exists(reg_path):
     except Exception as e:
         print("Warning loading regressor:", e)
 
+# =============================================================================
+# FLASK REST API ENDPOINTS & BACKEND CONTROLLER
+# =============================================================================
+# Simple Viva Explanation for Evaluators:
+# - Flask serves as the micro-web framework integrating PySpark outputs and ML models.
+# - Route 1: '/' -> Serves the HTML5/Tailwind dynamic interactive dashboard.
+# - Route 2: '/api/stats' -> Delivers global dataset aggregates (9.51M rows).
+# - Route 3: '/api/rdd_benchmarks' -> Returns PySpark RDD vs DataFrame Catalyst benchmarks.
+# - Route 4: '/api/performance' -> Delivers accuracy & AUC for all 4 ML models.
+# - Route 5: '/api/charts_metadata' -> Provides telemetry details for all 13 publication charts.
+# - Route 6: '/api/predict' -> Runs real-time inference using XGBoost, Random Forest, or Extra Trees.
+# =============================================================================
+
 # Initialize NoSQL store
 nosql_store = FireNoSQLStore()
 
 @app.route("/")
 def index():
+    """Serves the main single-page web dashboard."""
     return render_template("index.html")
 
 @app.route("/api/stats")
 def get_stats():
+    """Returns high-level summary statistics across 9.51M records."""
     summary_path = os.path.join(DATA_DIR, "summary_metrics.json")
     if os.path.exists(summary_path):
         with open(summary_path) as f:
@@ -337,6 +352,16 @@ def get_charts_metadata():
 @app.route("/api/predict", methods=["POST"])
 def predict():
     try:
+        # =====================================================================
+        # LIVE MACHINE LEARNING INFERENCE & EMERGENCY DISPATCH TRIAGE
+        # =====================================================================
+        # Simple Viva Explanation:
+        # - Accepts user inputs from the webpage (brightness, coordinates, scan).
+        # - Automatically calculates engineered feature: brightness_diff (T4 - T5).
+        # - Allows user to select active model: 'xgb' (XGBoost), 'rf' (Random Forest), or 'et' (Extra Trees).
+        # - Predicts 4-tier fire severity and calculates exact continuous FRP (MW).
+        # - Matches predicted tier to emergency action protocol (WARD framework).
+        # =====================================================================
         req = request.json or {}
         lat = float(req.get("latitude", -12.5))
         lon = float(req.get("longitude", 24.8))

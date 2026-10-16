@@ -1,6 +1,17 @@
 """
-Member 2: Visualizations Generator for NASA FIRMS Temporal Analysis
-Generates publication-quality charts saved in outputs/charts/
+High-Resolution Publication Visualizations Generator (300 DPI)
+==============================================================
+Generates publication-grade scientific telemetry charts using Matplotlib and Seaborn.
+
+Simple Viva Explanation for Evaluators:
+- Ingests the aggregated CSV and JSON cubes produced by the PySpark engine.
+- Renders 5 high-resolution (300 DPI) telemetry charts:
+    1. Daily Hotspot Detection Trend & 7-Day Rolling Window
+    2. Monthly Seasonality & Radiative Energy Partitioning
+    3. Diurnal 24-Hour UTC Convective Fire Cycle
+    4. Day vs. Night Operational Volume & Radiative Energy
+    5. Top 10 Peak Outbreak Days (Count vs. FRP Disparity)
+- Outputs are saved in 'outputs/charts/' and served live to the Flask web dashboard.
 """
 
 import os
