@@ -1,104 +1,70 @@
 {
-  "classification": {
-    "model_name": "Random Forest Classifier (Ensemble)",
-    "benchmark_model": "Histogram Gradient Boosted Trees",
-    "accuracy": 0.7472,
-    "precision_macro": 0.7006,
-    "recall_macro": 0.514,
-    "f1_macro": 0.5527,
-    "f1_weighted": 0.7309,
-    "roc_auc_weighted": 0.8742,
-    "gbt_accuracy": 0.7472,
-    "gbt_f1_weighted": 0.7297,
-    "gbt_roc_auc": 0.8748,
-    "inference_latency_per_sample_ms": 0.0052,
-    "training_time_seconds": 5.14,
-    "confusion_matrix": [
-      [
-        14183,
-        3549,
-        3,
-        3
-      ],
-      [
-        3254,
-        15022,
-        188,
-        11
-      ],
-      [
-        197,
-        2176,
-        411,
-        91
-      ],
-      [
-        41,
-        477,
-        120,
-        274
-      ]
-    ]
-  },
-  "regression": {
-    "model_name": "Random Forest Regressor",
-    "target": "Fire Radiative Power (MW)",
-    "rmse": 13.4548,
-    "mae": 5.2303,
+  "benchmark_sample_size": 200000,
+  "random_split_ratio": "80/20 Stratified",
+  "models_comparison": [
+    {
+      "model_name": "Random Forest",
+      "specification": "100 Trees | Max Depth: 16 | n_jobs: -1",
+      "accuracy": 74.72,
+      "precision_macro": 70.06,
+      "recall_macro": 51.4,
+      "f1_weighted": 0.7309,
+      "roc_auc": 0.8742,
+      "train_time_sec": 7.16,
+      "inference_latency_ms": 0.0132
+    },
+    {
+      "model_name": "HistGradientBoosting",
+      "specification": "100 Iterations | Max Depth: 10",
+      "accuracy": 74.72,
+      "precision_macro": 68.46,
+      "recall_macro": 51.45,
+      "f1_weighted": 0.7297,
+      "roc_auc": 0.8748,
+      "train_time_sec": 8.48,
+      "inference_latency_ms": 0.0194
+    },
+    {
+      "model_name": "Extra Trees",
+      "specification": "100 Trees | Max Depth: 16 | Extremely Randomized Splits",
+      "accuracy": 74.02,
+      "precision_macro": 69.89,
+      "recall_macro": 49.28,
+      "f1_weighted": 0.7189,
+      "roc_auc": 0.8678,
+      "train_time_sec": 2.72,
+      "inference_latency_ms": 0.0107
+    },
+    {
+      "model_name": "XGBoost",
+      "specification": "100 Trees | Depth: 8 | LR: 0.1 | Second-Order Gradient Optimization",
+      "accuracy": 74.77,
+      "precision_macro": 70.69,
+      "recall_macro": 51.78,
+      "f1_weighted": 0.731,
+      "roc_auc": 0.8752,
+      "train_time_sec": 5.37,
+      "inference_latency_ms": 0.0056
+    }
+  ],
+  "regression_metrics": {
+    "model": "Random Forest Regressor",
+    "rmse_mw": 13.45,
+    "mae_mw": 5.23,
     "r2_score": 0.4736,
     "explained_variance": 0.4736,
-    "training_time_seconds": 6.93
+    "train_time_sec": 12.79
   },
-  "temporal_evaluation": {
-    "chronological_cutoff_date": "2025-10-15",
+  "temporal_holdout_metrics": {
+    "validation_scheme": "Forward-Chronological Holdout (Leakage-Safe)",
+    "cutoff_date": "2025-10-15",
     "train_samples": 160000,
-    "forward_test_samples": 40000,
-    "forward_test_accuracy": 0.7119,
-    "forward_test_f1_weighted": 0.6868,
-    "training_time_seconds": 2.32,
-    "inference_latency_per_sample_ms": 0.0019,
-    "temporal_leakage_safe": true
-  },
-  "feature_importance": {
-    "brightness": 0.3292,
-    "brightness_diff": 0.1324,
-    "bright_t31": 0.1263,
-    "is_day": 0.0987,
-    "scan": 0.0779,
-    "latitude": 0.0691,
-    "longitude": 0.069,
-    "track": 0.0423,
-    "hour": 0.0351,
-    "confidence_num": 0.02,
-    "month": 0.0
-  },
-  "decision_framework": {
-    "name": "Wildfire Alert & Rapid Dispatch (WARD)",
-    "tiers": [
-      {
-        "tier": "Tier 3: Low",
-        "range": "< 5 MW",
-        "action": "Routine satellite surveillance",
-        "dispatch": "None"
-      },
-      {
-        "tier": "Tier 2: Moderate",
-        "range": "5 - 20 MW",
-        "action": "Watch status, notify local forest rangers",
-        "dispatch": "Ground reconnaissance"
-      },
-      {
-        "tier": "Tier 1: High",
-        "range": "20 - 50 MW",
-        "action": "High alert, mobilize ground firefighting units",
-        "dispatch": "Local response crews"
-      },
-      {
-        "tier": "Tier 0: Extreme",
-        "range": ">= 50 MW",
-        "action": "CRITICAL EMERGENCY - Rapid Aerial Water/Retardant Drop",
-        "dispatch": "Air-tanker & heavy brigade"
-      }
-    ]
+    "test_samples": 40000,
+    "accuracy": 71.19,
+    "f1_weighted": 0.6868,
+    "roc_auc": 0.8224,
+    "train_time_sec": 5.19,
+    "inference_latency_ms": 0.0041,
+    "concept_drift_drop_pct": 3.53
   }
 }

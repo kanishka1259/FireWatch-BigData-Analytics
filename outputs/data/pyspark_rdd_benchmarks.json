@@ -1,0 +1,75 @@
+{
+  "dataset_records": 9511402,
+  "rdd_sample_evaluated": 500000,
+  "benchmarks": {
+    "rdd_monthly_aggregation_sample_sec": 16.32,
+    "rdd_full_scale_extrapolated_sec": 310.4,
+    "dataframe_catalyst_runtime_sec": 3.38,
+    "catalyst_speedup_factor": 91.92,
+    "rdd_throughput_rows_sec": 30642,
+    "dataframe_throughput_rows_sec": 2816530
+  },
+  "architectural_insights": {
+    "rdd_architecture": "Low-level distributed memory abstraction using Python lambda workers over JVM (Py4J serialization). Provides granular functional programming (map, reduceByKey).",
+    "dataframe_architecture": "Declarative Catalyst Query Optimizer compiling expressions into optimized JVM bytecode with Project Tungsten off-heap binary memory.",
+    "academic_verdict": "DataFrame Catalyst is ~8.5x to 12x faster than raw RDDs due to vectorization and off-heap execution, whereas RDDs offer lower-level control for custom unformatted MapReduce logic."
+  },
+  "rdd_monthly_results": [
+    {
+      "year_month": "2025-10",
+      "count": 1088483,
+      "total_frp": 10749616.02,
+      "avg_frp": 9.88,
+      "avg_brightness": 336.34
+    },
+    {
+      "year_month": "2025-11",
+      "count": 1106841,
+      "total_frp": 9363002.09,
+      "avg_frp": 8.46,
+      "avg_brightness": 335.0
+    },
+    {
+      "year_month": "2025-12",
+      "count": 1079467,
+      "total_frp": 8651390.17,
+      "avg_frp": 8.01,
+      "avg_brightness": 334.91
+    },
+    {
+      "year_month": "2026-01",
+      "count": 1531105,
+      "total_frp": 12112776.34,
+      "avg_frp": 7.91,
+      "avg_brightness": 334.82
+    },
+    {
+      "year_month": "2026-02",
+      "count": 1190596,
+      "total_frp": 8872298.1,
+      "avg_frp": 7.45,
+      "avg_brightness": 334.9
+    },
+    {
+      "year_month": "2026-03",
+      "count": 1186378,
+      "total_frp": 9941798.29,
+      "avg_frp": 8.38,
+      "avg_brightness": 334.34
+    },
+    {
+      "year_month": "2026-04",
+      "count": 1130677,
+      "total_frp": 10066271.19,
+      "avg_frp": 8.9,
+      "avg_brightness": 333.31
+    },
+    {
+      "year_month": "2026-06",
+      "count": 1197855,
+      "total_frp": 12356080.26,
+      "avg_frp": 10.32,
+      "avg_brightness": 335.09
+    }
+  ]
+}

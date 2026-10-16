@@ -28,6 +28,10 @@ if sys.platform.startswith('win'):
     except Exception:
         pass
 
+# Ensure valid Python executable for PySpark workers
+os.environ["PYSPARK_PYTHON"] = sys.executable
+os.environ["PYSPARK_DRIVER_PYTHON"] = sys.executable
+
 # Ensure valid JAVA_HOME for PySpark
 java_home = os.environ.get("JAVA_HOME", "")
 if not java_home or not os.path.isdir(java_home):

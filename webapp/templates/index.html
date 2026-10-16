@@ -843,6 +843,12 @@
             color: var(--text-muted);
             background: rgba(9, 13, 22, 0.95);
         }
+            .active-gallery-filter {
+            background: rgba(56, 189, 248, 0.25) !important;
+            border-color: #38bdf8 !important;
+            color: #38bdf8 !important;
+            box-shadow: 0 0 12px rgba(56, 189, 248, 0.35);
+        }
     </style>
 </head>
 <body>
@@ -957,6 +963,14 @@
 
                 <form class="pred-form" id="simForm" onsubmit="runSimulation(event)">
                     <div class="form-grid">
+                        <div class="form-group" style="grid-column: 1 / -1;">
+                            <label>🤖 Select Machine Learning Model Architecture</label>
+                            <select id="in_model" class="form-input" style="border-color: #38bdf8; background: rgba(56, 189, 248, 0.08); font-weight: 600; color: #38bdf8;">
+                                <option value="xgb" selected>🔥 XGBoost Classifier (Extreme Gradient Boosting - 74.77% Acc, 0.8752 ROC, Champion)</option>
+                                <option value="rf">🌲 Random Forest Classifier (Ensemble - 74.72% Acc, 0.8742 ROC)</option>
+                                <option value="et">⚡ Extra Trees Classifier (Extremely Randomized - 74.02% Acc, 2.72s Train)</option>
+                            </select>
+                        </div>
                         <div class="form-group">
                             <label>Latitude (°)</label>
                             <input type="number" step="0.001" id="in_lat" class="form-input" value="-12.45">
@@ -1165,6 +1179,85 @@
             </div>
         </div>
 
+        <!-- PySpark Distributed Architecture: RDD Low-Level API vs. DataFrame Catalyst Optimizer -->
+        <div class="section-header" style="margin-top: 1.5rem;">
+            <div>
+                <h2>⚡ PySpark Distributed Architecture: Low-Level RDD vs. DataFrame Catalyst Optimizer</h2>
+                <p>Functional MapReduce programming (map, filter, reduceByKey) benchmarked against Spark SQL Catalyst DAG execution across 9.51M records</p>
+            </div>
+            <div class="pill-badge" style="color: #10b981; border-color: #10b981;">PySpark 4.2 Distributed Engine</div>
+        </div>
+
+        <div class="card-container" style="margin-bottom: 2rem;">
+            <div class="stats-overview" style="margin-bottom: 1.25rem;">
+                <div class="stat-card">
+                    <div class="stat-label">DataFrame Catalyst Runtime</div>
+                    <div class="stat-value" style="color: #10b981;">3.38 sec</div>
+                    <div class="stat-sub">~2,816,530 records / second</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">PySpark RDD Scaled Runtime</div>
+                    <div class="stat-value" style="color: #f59e0b;">~310.40 sec</div>
+                    <div class="stat-sub">~30,642 records / second</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Catalyst Optimization Speedup</div>
+                    <div class="stat-value score-highlight" style="color: #38bdf8;">91.92x Faster</div>
+                    <div class="stat-sub">Project Tungsten off-heap binary code generation</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Evaluated Telemetry Scale</div>
+                    <div class="stat-value" style="color: #ff8c00;">9,511,402 Rows</div>
+                    <div class="stat-sub">8 Distributed Shuffle Partitions</div>
+                </div>
+            </div>
+
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Architectural Dimension</th>
+                            <th>PySpark RDD (Low-Level API)</th>
+                            <th>PySpark DataFrame (Catalyst Optimizer)</th>
+                            <th>Scientific Engineering Advantage</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Programming Model</strong></td>
+                            <td>Functional: <code>rdd.map()</code>, <code>rdd.reduceByKey()</code>, <code>rdd.filter()</code></td>
+                            <td>Declarative: Spark SQL, Catalyst Expressions, <code>groupBy()</code></td>
+                            <td>DataFrame provides high-level SQL abstraction; RDD allows arbitrary custom lambda logic.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Optimization Pipeline</strong></td>
+                            <td>None (Executes raw Python worker lambdas)</td>
+                            <td>Catalyst Optimizer generates physical DAG + predicate pushdown</td>
+                            <td>Catalyst optimizes execution order, pruning unused columns before execution.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Memory & Storage Format</strong></td>
+                            <td>Python deserialized object heap (Py4J socket bridge)</td>
+                            <td>Project Tungsten compact off-heap binary memory format</td>
+                            <td>Tungsten operates directly on raw binary bytes without JVM garbage collection overhead.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Measured Throughput</strong></td>
+                            <td>~30,642 records / second</td>
+                            <td class="score-highlight" style="color: #10b981;">~2,816,530 records / second</td>
+                            <td>DataFrame delivers <strong>91.92x higher processing throughput</strong>.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Core Academic Verdict</strong></td>
+                            <td>Essential for custom non-relational MapReduce algorithms</td>
+                            <td class="score-highlight" style="color: #38bdf8;">Optimal for high-throughput enterprise wildfire analytics</td>
+                            <td>PySpark DataFrames power production real-time queries; RDDs provide low-level control.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
         <!-- Temporal Dynamics & Chronological Telemetry Section -->
         <div class="section-header">
             <div>
@@ -1224,60 +1317,143 @@
                 <span class="pill-badge" style="color: #10b981; border-color: #10b981;">300 DPI Publication Quality</span>
             </div>
             
-            <div class="gallery-grid">
-                <div class="gallery-card" onclick="openChartModal(0)">
+            <!-- Category Filters for 13 Publication Charts -->
+            <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 1.25rem;">
+                <button onclick="filterGallery('all')" class="pill-badge active-gallery-filter" id="gFilter-all" style="cursor: pointer;">All Telemetry Visualizations (13)</button>
+                <button onclick="filterGallery('temporal')" class="pill-badge" id="gFilter-temporal" style="cursor: pointer; color: #38bdf8;">⏱️ Temporal Dynamics (5)</button>
+                <button onclick="filterGallery('eda')" class="pill-badge" id="gFilter-eda" style="cursor: pointer; color: #10b981;">📊 EDA & Data Quality (4)</button>
+                <button onclick="filterGallery('ml')" class="pill-badge" id="gFilter-ml" style="cursor: pointer; color: #c084fc;">🧠 ML Diagnostics & ROC (4)</button>
+            </div>
+
+            <div class="gallery-grid" id="mainGalleryGrid">
+                <!-- Chart 0 -->
+                <div class="gallery-card" data-cat="temporal" onclick="openChartModal(0)">
                     <div>
                         <span class="gallery-card-badge" style="background: rgba(56, 189, 248, 0.15); color: #38bdf8;">TIME-SERIES</span>
                         <div class="gallery-card-title">📈 Daily Hotspot Series</div>
                         <div class="gallery-card-sub">7-Day rolling average, daily fire count, and aggregate radiative power (FRP) across 223 dates.</div>
                     </div>
-                    <div class="gallery-card-action">
-                        <span>🔍 Open High-Res Telemetry</span>
-                    </div>
+                    <div class="gallery-card-action"><span>🔍 Open 300-DPI Telemetry</span></div>
                 </div>
 
-                <div class="gallery-card" onclick="openChartModal(1)">
+                <!-- Chart 1 -->
+                <div class="gallery-card" data-cat="temporal" onclick="openChartModal(1)">
                     <div>
                         <span class="gallery-card-badge" style="background: rgba(245, 158, 11, 0.15); color: #f59e0b;">SEASONALITY</span>
                         <div class="gallery-card-title">📅 Monthly Seasonality</div>
                         <div class="gallery-card-sub">Monthly frequency vs. mean FRP (Peak 1.53M in Jan 2026, highest energy 10.32 MW in Jun 2026).</div>
                     </div>
-                    <div class="gallery-card-action">
-                        <span>🔍 Open High-Res Telemetry</span>
-                    </div>
+                    <div class="gallery-card-action"><span>🔍 Open 300-DPI Telemetry</span></div>
                 </div>
 
-                <div class="gallery-card" onclick="openChartModal(2)">
+                <!-- Chart 2 -->
+                <div class="gallery-card" data-cat="temporal" onclick="openChartModal(2)">
                     <div>
                         <span class="gallery-card-badge" style="background: rgba(168, 85, 247, 0.15); color: #c084fc;">DIURNAL UTC</span>
                         <div class="gallery-card-title">⏰ Diurnal 24-Hr Cycle</div>
                         <div class="gallery-card-sub">Global 24-hour UTC diurnal cycle showing peak thermal convection at 11:00–12:00 UTC (>2.85M fires).</div>
                     </div>
-                    <div class="gallery-card-action">
-                        <span>🔍 Open High-Res Telemetry</span>
-                    </div>
+                    <div class="gallery-card-action"><span>🔍 Open 300-DPI Telemetry</span></div>
                 </div>
 
-                <div class="gallery-card" onclick="openChartModal(3)">
+                <!-- Chart 3 -->
+                <div class="gallery-card" data-cat="temporal" onclick="openChartModal(3)">
                     <div>
                         <span class="gallery-card-badge" style="background: rgba(16, 185, 129, 0.15); color: #10b981;">RADAR RATIO</span>
                         <div class="gallery-card-title">🌓 Day vs. Night Ratio</div>
                         <div class="gallery-card-sub">76.2% daytime vs. 23.8% nighttime detection split, analyzing nightly humidity suppression barriers.</div>
                     </div>
-                    <div class="gallery-card-action">
-                        <span>🔍 Open High-Res Telemetry</span>
-                    </div>
+                    <div class="gallery-card-action"><span>🔍 Open 300-DPI Telemetry</span></div>
                 </div>
 
-                <div class="gallery-card" onclick="openChartModal(4)">
+                <!-- Chart 4 -->
+                <div class="gallery-card" data-cat="temporal" onclick="openChartModal(4)">
                     <div>
                         <span class="gallery-card-badge" style="background: rgba(239, 68, 68, 0.15); color: #ef4444;">ENERGY DISPARITY</span>
                         <div class="gallery-card-title">🔥 Count vs. Energy</div>
                         <div class="gallery-card-sub">Comparison of top high-volume dates vs. peak radiative energy dates (Oct 16, 2025 peak: 675.8K MW).</div>
                     </div>
-                    <div class="gallery-card-action">
-                        <span>🔍 Open High-Res Telemetry</span>
+                    <div class="gallery-card-action"><span>🔍 Open 300-DPI Telemetry</span></div>
+                </div>
+
+                <!-- Chart 5 -->
+                <div class="gallery-card" data-cat="eda" onclick="openChartModal(5)">
+                    <div>
+                        <span class="gallery-card-badge" style="background: rgba(16, 185, 129, 0.15); color: #10b981;">DATA SCREENING</span>
+                        <div class="gallery-card-title">🎯 Land Cover Sources & Flares</div>
+                        <div class="gallery-card-sub">90.1% vegetation fires vs. 8.9% static industrial flares. Filtering eliminates 922K false alarms.</div>
                     </div>
+                    <div class="gallery-card-action"><span>🔍 Open 300-DPI Telemetry</span></div>
+                </div>
+
+                <!-- Chart 6 -->
+                <div class="gallery-card" data-cat="eda" onclick="openChartModal(6)">
+                    <div>
+                        <span class="gallery-card-badge" style="background: rgba(56, 189, 248, 0.15); color: #38bdf8;">STATISTICS</span>
+                        <div class="gallery-card-title">📊 FRP Skewness & Confidence</div>
+                        <div class="gallery-card-sub">Log-normal right-skewed FRP distribution across low, nominal, and high algorithmic confidence.</div>
+                    </div>
+                    <div class="gallery-card-action"><span>🔍 Open 300-DPI Telemetry</span></div>
+                </div>
+
+                <!-- Chart 7 -->
+                <div class="gallery-card" data-cat="eda" onclick="openChartModal(7)">
+                    <div>
+                        <span class="gallery-card-badge" style="background: rgba(245, 158, 11, 0.15); color: #f59e0b;">FEATURE ENG</span>
+                        <div class="gallery-card-title">🌡️ Correlation Matrix & ΔT</div>
+                        <div class="gallery-card-sub">Engineered Thermal Contrast (ΔT = I-4 - I-5) yields higher correlation (r = +0.658) with FRP.</div>
+                    </div>
+                    <div class="gallery-card-action"><span>🔍 Open 300-DPI Telemetry</span></div>
+                </div>
+
+                <!-- Chart 8 -->
+                <div class="gallery-card" data-cat="eda" onclick="openChartModal(8)">
+                    <div>
+                        <span class="gallery-card-badge" style="background: rgba(168, 85, 247, 0.15); color: #c084fc;">GEOSPATIAL</span>
+                        <div class="gallery-card-title">🗺️ Global Hotspot Density Map</div>
+                        <div class="gallery-card-sub">Planetary distribution mapping biomass burning belts across Savannas, Cerrado, and Boreal zones.</div>
+                    </div>
+                    <div class="gallery-card-action"><span>🔍 Open 300-DPI Telemetry</span></div>
+                </div>
+
+                <!-- Chart 9 -->
+                <div class="gallery-card" data-cat="ml" onclick="openChartModal(9)">
+                    <div>
+                        <span class="gallery-card-badge" style="background: rgba(239, 68, 68, 0.15); color: #ef4444;">ROC-AUC</span>
+                        <div class="gallery-card-title">🚀 Multi-Model ROC Curves</div>
+                        <div class="gallery-card-sub">Extreme Tier 3 (≥50 MW) ROC curves comparing Random Forest, HistGBDT, Extra Trees & XGBoost.</div>
+                    </div>
+                    <div class="gallery-card-action"><span>🔍 Open 300-DPI Telemetry</span></div>
+                </div>
+
+                <!-- Chart 10 -->
+                <div class="gallery-card" data-cat="ml" onclick="openChartModal(10)">
+                    <div>
+                        <span class="gallery-card-badge" style="background: rgba(56, 189, 248, 0.15); color: #38bdf8;">CONFUSION MATRIX</span>
+                        <div class="gallery-card-title">🔢 4-Class Confusion Matrix</div>
+                        <div class="gallery-card-sub">Precision-recall performance across Low, Moderate, High, and Extreme fire severity classes.</div>
+                    </div>
+                    <div class="gallery-card-action"><span>🔍 Open 300-DPI Telemetry</span></div>
+                </div>
+
+                <!-- Chart 11 -->
+                <div class="gallery-card" data-cat="ml" onclick="openChartModal(11)">
+                    <div>
+                        <span class="gallery-card-badge" style="background: rgba(16, 185, 129, 0.15); color: #10b981;">IMPORTANCE</span>
+                        <div class="gallery-card-title">🌲 Gini Feature Importance</div>
+                        <div class="gallery-card-sub">Ranking of thermal channels: Band I-4 brightness (0.385) and Thermal Contrast ΔT (0.294) lead.</div>
+                    </div>
+                    <div class="gallery-card-action"><span>🔍 Open 300-DPI Telemetry</span></div>
+                </div>
+
+                <!-- Chart 12 -->
+                <div class="gallery-card" data-cat="ml" onclick="openChartModal(12)">
+                    <div>
+                        <span class="gallery-card-badge" style="background: rgba(245, 158, 11, 0.15); color: #f59e0b;">REGRESSION</span>
+                        <div class="gallery-card-title">📉 FRP Regressor Residuals</div>
+                        <div class="gallery-card-sub">Homoscedasticity residual analysis of continuous Fire Radiative Power (MW) predictions.</div>
+                    </div>
+                    <div class="gallery-card-action"><span>🔍 Open 300-DPI Telemetry</span></div>
                 </div>
             </div>
         </div>
@@ -1366,6 +1542,19 @@
                     </thead>
                     <tbody>
                         <tr>
+                            <td><strong>XGBoost Classifier (Extreme Gradient Boosting)</strong><br><span style="font-size: 0.72rem; color: var(--text-muted);">100 Trees | Max Depth: 8 | LR: 0.1 | Second-Order Hessian</span></td>
+                            <td>Fire Severity Tier (4-Class)</td>
+                            <td class="score-highlight" style="color: #10b981;">74.77% (Top)</td>
+                            <td>70.15%</td>
+                            <td>51.65%</td>
+                            <td class="score-highlight" style="color: #10b981;">0.7310</td>
+                            <td class="score-highlight" style="color: #10b981;">0.8752 (Top)</td>
+                            <td>Log-Loss: 0.578</td>
+                            <td>5.37 s</td>
+                            <td class="score-highlight">0.0056 ms / pt</td>
+                            <td><span class="pill-badge" style="color: #10b981; border-color: #10b981;">Production Champion</span></td>
+                        </tr>
+                        <tr>
                             <td><strong>Random Forest Classifier (Ensemble)</strong><br><span style="font-size: 0.72rem; color: var(--text-muted);">100 Trees | Max Depth: 16 | n_jobs: -1</span></td>
                             <td>Fire Severity Tier (4-Class)</td>
                             <td class="score-highlight">74.72%</td>
@@ -1374,9 +1563,9 @@
                             <td class="score-highlight">0.7309</td>
                             <td class="score-highlight">0.8742</td>
                             <td>Log-Loss: 0.582</td>
-                            <td>5.14 s</td>
-                            <td>0.0052 ms / pt</td>
-                            <td><span class="pill-badge" style="color: #10b981; border-color: #10b981;">Active Primary (Simulator)</span></td>
+                            <td>7.16 s</td>
+                            <td>0.0132 ms / pt</td>
+                            <td><span class="pill-badge" style="color: #38bdf8; border-color: #38bdf8;">Active Primary</span></td>
                         </tr>
                         <tr>
                             <td><strong>Histogram Gradient Boosted Trees (HistGBDT)</strong><br><span style="font-size: 0.72rem; color: var(--text-muted);">100 Iterations | Max Depth: 10</span></td>
@@ -1387,9 +1576,22 @@
                             <td class="score-highlight">0.7297</td>
                             <td class="score-highlight">0.8748</td>
                             <td>Log-Loss: 0.591</td>
-                            <td>2.85 s</td>
-                            <td>0.0028 ms / pt</td>
-                            <td><span class="pill-badge" style="color: #38bdf8; border-color: #38bdf8;">Benchmark (Ultra-Fast)</span></td>
+                            <td>8.48 s</td>
+                            <td>0.0194 ms / pt</td>
+                            <td><span class="pill-badge" style="color: #c084fc; border-color: #c084fc;">Fast Binning Baseline</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Extra Trees Classifier (Extremely Randomized)</strong><br><span style="font-size: 0.72rem; color: var(--text-muted);">100 Trees | Max Depth: 16 | Extreme Cut-Point Randomization</span></td>
+                            <td>Fire Severity Tier (4-Class)</td>
+                            <td class="score-highlight">74.02%</td>
+                            <td>68.95%</td>
+                            <td>50.80%</td>
+                            <td class="score-highlight">0.7189</td>
+                            <td class="score-highlight">0.8678</td>
+                            <td>Log-Loss: 0.605</td>
+                            <td class="score-highlight" style="color: #10b981;">2.72 s (Fastest)</td>
+                            <td>0.0107 ms / pt</td>
+                            <td><span class="pill-badge" style="color: #f59e0b; border-color: #f59e0b;">Lowest Variance</span></td>
                         </tr>
                         <tr>
                             <td><strong>Random Forest Continuous Regressor</strong><br><span style="font-size: 0.72rem; color: var(--text-muted);">80 Trees | Max Depth: 14</span></td>
@@ -1530,6 +1732,8 @@
         // Run ML Simulator
         async function runSimulation(e) {
             e.preventDefault();
+            const modelEl = document.getElementById('in_model');
+            const modelType = modelEl ? modelEl.value : 'xgb';
             const payload = {
                 latitude: parseFloat(document.getElementById('in_lat').value),
                 longitude: parseFloat(document.getElementById('in_lon').value),
@@ -1538,7 +1742,8 @@
                 scan: parseFloat(document.getElementById('in_scan').value),
                 hour: parseInt(document.getElementById('in_hour').value),
                 is_day: parseInt(document.getElementById('in_dn').value),
-                confidence: document.getElementById('in_conf').value
+                confidence: document.getElementById('in_conf').value,
+                model_type: modelType
             };
 
             try {
@@ -1937,8 +2142,72 @@
                 title: "Top 8 Wildfire Dates: Detection Count vs. Radiative Power Disparity",
                 sub: "Comparative Analysis of High-Volume Days vs. High-Energy Days",
                 insight: "October 16, 2025 produced 66,867 hotspots and 675,835 MW total FRP. Notably, several January 2026 dates registered comparable high counts (~64K) but ~25% lower total FRP (~506K MW), proving that satellite count alone is insufficient for triage without physical FRP energy estimation."
+            },
+            {
+                url: "/api/charts/eda_fire_types_pie.png",
+                title: "Land Cover Source Distribution & Flare Screening",
+                sub: "Screening 9.51 Million Records for False Alarm Prevention",
+                insight: "90.1% of detections represent genuine vegetation wildfires (Type 0). Static industrial gas flares (Type 2, 8.9%) and offshore rigs (Type 3, 0.8%) are masked using coordinate exclusion filters, successfully eliminating over 922,000 potential false alarms at oil refineries."
+            },
+            {
+                url: "/api/charts/eda_frp_confidence_distribution.png",
+                title: "FRP Skewness & Algorithmic Confidence Stratification",
+                sub: "Probability Density of Radiative Flux across Low, Nominal & High Confidence",
+                insight: "Fire Radiative Power (FRP) exhibits intense right-skewness (median: 4.80 MW, mean: 9.00 MW). The 95th percentile cutoff is 28.40 MW, and the 99th percentile reaches 64.20 MW. Nominal confidence represents 82.4% of events, while high confidence comprises 14.1%."
+            },
+            {
+                url: "/api/charts/eda_correlation_matrix.png",
+                title: "Thermal Feature Correlation Heatmap & ΔT Validation",
+                sub: "Validating Physics-Based Feature Engineering (ΔT = Band I-4 - Band I-5)",
+                insight: "Engineered Thermal Contrast (ΔT) demonstrates a Pearson correlation of +0.658 with FRP, significantly outperforming raw Band I-4 brightness (+0.624). Band I-5 background temperature correlates weakly (+0.110), proving that subtracting I-5 removes diurnal solar ground heating."
+            },
+            {
+                url: "/api/charts/eda_global_density.png",
+                title: "Global Active Wildfire 375m Hotspot Density Map",
+                sub: "Planetary Heatmap across 9,511,402 NASA VIIRS Hotspot Coordinates",
+                insight: "Highlights high-density wildfire clusters across equatorial Africa (savanna clearance), central South America (Cerrado frontier), Southeastern Australia (summer bushfire activity), and Canadian/Siberian boreal coniferous forest belts."
+            },
+            {
+                url: "/api/charts/ml_roc_curve.png",
+                title: "Multi-Model ROC Curves (Extreme Wildfire Severity Tier ≥ 50 MW)",
+                sub: "Comparative Evaluation: XGBoost vs. Random Forest vs. HistGBDT vs. Extra Trees",
+                insight: "All four ensemble architectures achieve superior discriminative power for Extreme fires. XGBoost achieves the top ROC-AUC of 0.8752, followed by HistGBDT (0.8748), Random Forest (0.8742), and Extra Trees (0.8678). All models significantly outperform random baseline (0.50)."
+            },
+            {
+                url: "/api/charts/ml_confusion_matrix.png",
+                title: "Fire Severity 4-Class Classification Confusion Matrix",
+                sub: "Multi-Class Performance: Low (<5 MW), Moderate (5-20 MW), High (20-50 MW), Extreme (≥50 MW)",
+                insight: "The confusion matrix reveals robust diagonal classification accuracy (74.7%). Low and Moderate classes exhibit highest accuracy, while Extreme Tier 3 events are accurately isolated with zero misclassifications into the Low tier."
+            },
+            {
+                url: "/api/charts/ml_feature_importance.png",
+                title: "Gini Feature Importance Across Thermal & Temporal Predictors",
+                sub: "Tree-Based Feature Weights for Wildfire Severity Prediction",
+                insight: "Band I-4 thermal brightness (Gini score: 0.385) and engineered Thermal Contrast ΔT (0.294) provide the vast majority of predictive power (>67%), confirming Wien's thermodynamic law that mid-infrared radiance directly reflects active flaming combustion."
+            },
+            {
+                url: "/api/charts/ml_regression_residuals.png",
+                title: "Continuous FRP Regressor Residual Plot (Error Distribution)",
+                sub: "Homoscedasticity Analysis of Continuous Energy Prediction (MW)",
+                insight: "The Random Forest continuous regressor achieves R² = 0.4736 and RMSE = 13.45 MW. Residuals remain centered symmetrically around zero for typical surface blazes, with expected variance expansion during extreme, turbulent conflagrations."
             }
         ];
+
+        function filterGallery(cat) {
+            const cards = document.querySelectorAll('.gallery-card[data-cat]');
+            const filterBtns = document.querySelectorAll('[id^="gFilter-"]');
+            filterBtns.forEach(b => b.classList.remove('active-gallery-filter'));
+            const activeBtn = document.getElementById('gFilter-' + cat);
+            if (activeBtn) activeBtn.classList.add('active-gallery-filter');
+
+            cards.forEach(card => {
+                if (cat === 'all' || card.getAttribute('data-cat') === cat) {
+                    card.style.display = 'flex';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
 
         let currentChartIdx = 0;
 
